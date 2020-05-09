@@ -96,7 +96,7 @@ public class DailyFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         loading.hide();
         dailyDateTv.setText(TimeUtil.getDate());
-        getData();
+//        getData();
         return view;
     }
 

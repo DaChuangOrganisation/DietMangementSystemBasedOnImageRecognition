@@ -1,12 +1,18 @@
 package com.example.administrator.kalulli.litepal;
 
+import org.litepal.crud.LitePalSupport;
+
 import java.util.Date;
 
 /*
 单次食物记录
  */
-public class FoodItem {
-    private String foodName;
+public class FoodItem extends LitePalSupport {
+
+    private DailyCalorie dailyCalorie;//DailyCalorie与FoodItem一对多
+
+    private long id; //菜品单目id(自增,自赋值)
+    private String foodName; //食物名称
     private double calorie; // 每100g
     private Date date; // 添加的时间
     private String imgPath;//食物图片路径
@@ -45,5 +51,21 @@ public class FoodItem {
 
     public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
+    }
+
+    public DailyCalorie getDailyCalorie() {
+        return dailyCalorie;
+    }
+
+    public void setDailyCalorie(DailyCalorie dailyCalorie) {
+        this.dailyCalorie = dailyCalorie;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
