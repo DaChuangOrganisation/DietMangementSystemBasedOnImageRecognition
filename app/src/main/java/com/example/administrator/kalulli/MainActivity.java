@@ -12,12 +12,18 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.administrator.kalulli.base.BaseActivity;
+import com.example.administrator.kalulli.litepal.DailyCalorie;
+import com.example.administrator.kalulli.litepal.FoodItem;
 import com.example.administrator.kalulli.ui.daily.DailyFragment;
 import com.example.administrator.kalulli.ui.me.MeFragment;
 import com.example.administrator.kalulli.ui.camera.StartCameraFragment;
 import com.example.administrator.kalulli.ui.suggest.SuggestFragment;
 import com.example.administrator.kalulli.utils.ActivityUtils;
 import com.example.administrator.kalulli.utils.BottomNavigationViewHelper;
+
+import org.litepal.LitePal;
+
+import java.util.Date;
 
 import butterknife.BindView;
 

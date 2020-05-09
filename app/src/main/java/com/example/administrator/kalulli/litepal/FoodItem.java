@@ -1,5 +1,6 @@
 package com.example.administrator.kalulli.litepal;
 
+import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 import java.util.Date;
@@ -7,7 +8,7 @@ import java.util.Date;
 /*
 单次食物记录
  */
-public class FoodItem extends LitePalSupport {
+public class FoodItem extends LitePalSupport implements DataManipulation{
 
     private DailyCalorie dailyCalorie;//DailyCalorie与FoodItem一对多
 
@@ -19,6 +20,21 @@ public class FoodItem extends LitePalSupport {
 
     public FoodItem(){
 
+    }
+
+    public FoodItem(String foodName, double calorie, Date date, String imgPath) {
+        this.foodName = foodName;
+        this.calorie = calorie;
+        this.date = date;
+        this.imgPath = imgPath;
+    }
+
+    public FoodItem(DailyCalorie dailyCalorie, String foodName, double calorie, Date date, String imgPath) {
+        this.dailyCalorie = dailyCalorie;
+        this.foodName = foodName;
+        this.calorie = calorie;
+        this.date = date;
+        this.imgPath = imgPath;
     }
 
     public String getFoodName() {
@@ -68,4 +84,15 @@ public class FoodItem extends LitePalSupport {
     public void setId(long id) {
         this.id = id;
     }
+
+    @Override
+    public boolean saveOrUpdateData() {
+        return   this.save();
+    }
+
+    @Override
+    public int deleteData() {
+        return LitePal.delete(FoodItem.class,this.getId());
+    }
+
 }
