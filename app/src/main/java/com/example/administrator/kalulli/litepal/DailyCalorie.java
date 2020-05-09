@@ -1,5 +1,6 @@
 package com.example.administrator.kalulli.litepal;
 
+import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 import java.util.ArrayList;
@@ -7,7 +8,9 @@ import java.util.Date;
 import java.util.List;
 
 enum IntakeState{
-    excess(1),appropriacy(2),smidgen(3);
+    excess(1),//过量
+    appropriacy(2),//适量
+    smidgen(3);//少量
 
     private String name;
     private int index;
@@ -37,7 +40,7 @@ enum IntakeState{
 /*
 每日食物清单
  */
-public class DailyCalorie extends LitePalSupport {
+public class DailyCalorie extends LitePalSupport implements DataManipulation {
 
     private User user;//DailyCalorie与User一对多
     private List<FoodItem> itemList = new ArrayList<>();//DailyCalorie与FoodItem一对多
@@ -46,6 +49,15 @@ public class DailyCalorie extends LitePalSupport {
     private Date date; //今日日期
     private double totalIntake; //每日卡路里摄入总量
     private IntakeState intakeState; //每日卡路里指标状态
+
+
+    public DailyCalorie() {
+    }
+
+
+    public DailyCalorie(Date date) {
+        this.date = date;
+    }
 
     public Date getDate() {
         return date;
@@ -94,4 +106,15 @@ public class DailyCalorie extends LitePalSupport {
     public void setId(long id) {
         this.id = id;
     }
+
+    @Override
+    public boolean saveOrUpdateData() {
+        return   this.save();
+    }
+
+    @Override
+    public int deleteData() {
+        return LitePal.delete(DailyCalorie.class,this.getId());
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.administrator.kalulli.litepal;
 
+import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ enum Gender{
 
 
 }
-public class User extends LitePalSupport {
+public class User extends LitePalSupport implements DataManipulation {
 
     private List<DailyCalorie> DailyCaloireList = new ArrayList<>(); //DailyCalorie与User一对多
 
@@ -44,6 +45,16 @@ public class User extends LitePalSupport {
     private int age;// 年龄
     private double height;// cm单位制
     private double calorie;// 该用户每日建议卡路里摄入量
+
+    public User() {
+    }
+
+    public User(Gender gender, int age, double height, double calorie) {
+        this.gender = gender;
+        this.age = age;
+        this.height = height;
+        this.calorie = calorie;
+    }
 
     public Gender getGender() {
         return gender;
@@ -92,4 +103,15 @@ public class User extends LitePalSupport {
     public void setId(long id) {
         this.id = id;
     }
+
+    @Override
+    public boolean saveOrUpdateData() {
+        return   this.save();
+    }
+
+    @Override
+    public int deleteData() {
+        return LitePal.delete(User.class,this.getId());
+    }
+
 }

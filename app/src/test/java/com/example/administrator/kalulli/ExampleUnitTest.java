@@ -1,6 +1,12 @@
 package com.example.administrator.kalulli;
 
+import android.util.Log;
+
+import com.example.administrator.kalulli.litepal.DailyCalorie;
+import com.example.administrator.kalulli.litepal.FoodItem;
+
 import org.junit.Test;
+import org.litepal.LitePal;
 
 import static org.junit.Assert.*;
 
@@ -10,8 +16,8 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
+    private static final String TAG = "ExampleUnitTest";
     @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+    public void testSaveOrUpdateData(){
     }
 }
