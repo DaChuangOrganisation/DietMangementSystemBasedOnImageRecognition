@@ -112,7 +112,7 @@ public class SuggestFragment extends Fragment implements RapidFloatingActionCont
         unbinder = ButterKnife.bind(this, view);
         initFloating();
         if(AVUser.getCurrentUser() == null){
-            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
         }else {
             getData();
         }
