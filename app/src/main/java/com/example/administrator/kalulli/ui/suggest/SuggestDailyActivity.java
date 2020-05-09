@@ -25,6 +25,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+
+/*
+已将AVOS cloud相关的代码全部注释
+ */
 public class SuggestDailyActivity extends BaseActivity {
 
     private static final String TAG = "SuggestDailyActivity";
@@ -56,14 +60,15 @@ public class SuggestDailyActivity extends BaseActivity {
     TextView eveningNumber;
     @BindView(R.id.sum_tv)
     TextView sumTv;
-    private List<AVObject> alllist = new ArrayList<>();
+//    private List<AVObject> alllist = new ArrayList<>();
     private boolean morningIs = false;
     private boolean afternoon1Is = false;
     private boolean afternoon2Is = false;
     private boolean eveningIs = false;
     private double sum;
 
-    private Handler handler = new Handler() {
+//    private Handler handler = new Handler() {
+        /*
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -127,12 +132,15 @@ public class SuggestDailyActivity extends BaseActivity {
             }
             sumTv.setText("预计 "+sum+" 千卡，祝您饮食愉快");
         }
-    };
+
+         */
+//    };
 
     protected void logicActivity(Bundle mSavedInstanceState) {
-        getData();
+//        getData();
     }
 
+    /*
     private void getData() {
         AVQuery<AVObject> query = new AVQuery<>(TableUtil.FOOD_TABLE_NAME);
         query.findInBackground(new FindCallback<AVObject>() {
@@ -148,6 +156,8 @@ public class SuggestDailyActivity extends BaseActivity {
             }
         });
     }
+
+     */
 
     @Override
     protected int getLayoutId() {

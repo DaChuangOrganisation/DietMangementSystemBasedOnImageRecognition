@@ -29,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mFragmentManager = getSupportFragmentManager();
         mActivity = this;
-        mAVUserFinal = AVUser.getCurrentUser();
+//        mAVUserFinal = AVUser.getCurrentUser();
         logicActivity(savedInstanceState);
     }
 
