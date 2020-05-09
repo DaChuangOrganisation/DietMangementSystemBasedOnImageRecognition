@@ -83,10 +83,16 @@ public class CameraResultActivity extends BaseActivity {
             if (strings.length > 5) {
                 description = strings[11];
             }
+
             FoodJson foodJson = new FoodJson(object1.getString("name"),
                     object1.getString("calorie"),
                     bundle.getString("str"),
                     description);
+
+            foodJson.push("成分1", "0.00g");
+            foodJson.push("成分2", "0.00mg");
+            foodJson.push("成分3", "0.00mg");
+
             list.add(foodJson);
             //Log.i(TAG, "logicActivity: "+ strings[7]);
 
