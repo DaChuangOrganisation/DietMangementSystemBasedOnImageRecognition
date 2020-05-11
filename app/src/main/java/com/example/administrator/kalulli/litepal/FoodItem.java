@@ -17,6 +17,9 @@ public class FoodItem extends LitePalSupport implements DataManipulation{
     private double calorie; // 每100g
     private Date date; // 添加的时间
     private String imgPath;//食物图片路径
+    private double protein;//蛋白质
+    private double fat;//脂肪
+    private double carbohydrate;//碳水化合物
 
     public FoodItem(){
 
@@ -35,6 +38,40 @@ public class FoodItem extends LitePalSupport implements DataManipulation{
         this.calorie = calorie;
         this.date = date;
         this.imgPath = imgPath;
+    }
+
+    public FoodItem(String foodName, double calorie, Date date, String imgPath, double protein, double fat, double carbohydrate) {
+        this.foodName = foodName;
+        this.calorie = calorie;
+        this.date = date;
+        this.imgPath = imgPath;
+        this.protein = protein;
+        this.fat = fat;
+        this.carbohydrate = carbohydrate;
+    }
+
+    public double getProtein() {
+        return protein;
+    }
+
+    public void setProtein(double protein) {
+        this.protein = protein;
+    }
+
+    public double getFat() {
+        return fat;
+    }
+
+    public void setFat(double fat) {
+        this.fat = fat;
+    }
+
+    public double getCarbohydrate() {
+        return carbohydrate;
+    }
+
+    public void setCarbohydrate(double carbohydrate) {
+        this.carbohydrate = carbohydrate;
     }
 
     public String getFoodName() {

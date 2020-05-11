@@ -22,7 +22,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(200);
                     Intent intent = new Intent(getApplication(),MainActivity.class);
                     startActivity(intent);
                     mActivity.finish();

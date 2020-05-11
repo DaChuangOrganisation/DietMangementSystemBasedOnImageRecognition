@@ -2,7 +2,7 @@ package com.example.administrator.kalulli;
 
 import android.app.Application;
 
-import com.avos.avoscloud.AVOSCloud;
+//import com.avos.avoscloud.AVOSCloud;
 
 /**
  * Created by Administrator on 2019/5/17.

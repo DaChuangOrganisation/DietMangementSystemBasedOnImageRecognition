@@ -41,6 +41,7 @@ public class User extends LitePalSupport implements DataManipulation {
     private List<DailyCalorie> DailyCaloireList = new ArrayList<>(); //DailyCalorie与User一对多
 
     private long id; //用户id(自增,自赋值)
+    private String name;//用户姓名
     private Gender gender;//性别
     private int age;// 年龄
     private double height;// cm单位制
@@ -49,7 +50,8 @@ public class User extends LitePalSupport implements DataManipulation {
     public User() {
     }
 
-    public User(Gender gender, int age, double height, double calorie) {
+    public User(String name,Gender gender, int age, double height, double calorie) {
+        this.name = name;
         this.gender = gender;
         this.age = age;
         this.height = height;
@@ -94,6 +96,14 @@ public class User extends LitePalSupport implements DataManipulation {
 
     public void setDailyCaloireList(List<DailyCalorie> dailyCaloireList) {
         DailyCaloireList = dailyCaloireList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getId() {
