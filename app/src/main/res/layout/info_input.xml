@@ -189,8 +189,8 @@
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="40dp"
-            android:shadowColor="@color/google_green"
-            android:textColor="@color/google_green"
+            android:shadowColor="@color/google_blue"
+            android:textColor="@color/google_blue"
             android:text="男" />
 
         <RadioButton
@@ -199,9 +199,9 @@
             android:layout_height="30dp"
             android:layout_marginLeft="140dp"
             android:layout_marginTop="-30dp"
-            android:shadowColor="@color/google_green"
+            android:shadowColor="@color/google_blue"
             android:text="女"
-            android:textColor="@color/google_green"
+            android:textColor="@color/google_blue"
             android:textColorLink="#4CAF50" />
 
     </RadioGroup>

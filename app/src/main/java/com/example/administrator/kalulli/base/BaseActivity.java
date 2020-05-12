@@ -21,7 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected FragmentManager mFragmentManager;
     protected Activity mActivity;
     protected AVUser mAVUserFinal;
-
+    public static boolean bl=false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

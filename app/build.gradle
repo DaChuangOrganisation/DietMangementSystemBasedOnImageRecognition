@@ -56,8 +56,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'org.litepal.android:java:3.0.0'
     implementation "com.squareup.okhttp3:okhttp:3.10.0"
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> 93a598d581838f6de11ca0c59debe82e3759a244
+
+

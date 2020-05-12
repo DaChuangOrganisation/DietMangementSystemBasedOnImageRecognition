@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.example.administrator.kalulli.base.BaseActivity;
+import com.example.administrator.kalulli.BasicInfoInpu;
 
 public class SplashActivity extends BaseActivity {
 
@@ -22,15 +23,16 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 try {
-<<<<<<< HEAD
+                    if(bl==false){
                     Thread.sleep(1000);
                     Intent intent = new Intent(getApplication(),BasicInfoInpu.class);
-=======
+                    startActivity(intent);
+                    mActivity.finish();}
+                    else{
                     Thread.sleep(200);
                     Intent intent = new Intent(getApplication(),MainActivity.class);
->>>>>>> 93a598d581838f6de11ca0c59debe82e3759a244
                     startActivity(intent);
-                    mActivity.finish();
+                    mActivity.finish();}
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
