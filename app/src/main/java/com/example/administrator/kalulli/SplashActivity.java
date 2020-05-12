@@ -22,8 +22,13 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 try {
+<<<<<<< HEAD
                     Thread.sleep(1000);
                     Intent intent = new Intent(getApplication(),BasicInfoInpu.class);
+=======
+                    Thread.sleep(200);
+                    Intent intent = new Intent(getApplication(),MainActivity.class);
+>>>>>>> 93a598d581838f6de11ca0c59debe82e3759a244
                     startActivity(intent);
                     mActivity.finish();
                 } catch (InterruptedException e) {

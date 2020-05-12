@@ -10,7 +10,7 @@
     <item android:id="@+id/daily_item"
         android:icon="@drawable/ic_today_black_24dp"
         android:title="日记"/>
-    <item android:id="@+id/me_item"
-        android:icon="@drawable/ic_person_black_24dp"
-        android:title="我的"/>
+<!--    <item android:id="@+id/me_item"-->
+<!--        android:icon="@drawable/ic_person_black_24dp"-->
+<!--        android:title="我的"/>-->
 </menu>

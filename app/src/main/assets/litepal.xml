@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="KaluliReCognition" ></dbname>
+
+    <version value="1" ></version>
+
+    <list>
+        <mapping class="com.example.administrator.kalulli.litepal.User"></mapping>
+        <mapping class="com.example.administrator.kalulli.litepal.DailyCalorie"></mapping>
+        <mapping class="com.example.administrator.kalulli.litepal.FoodItem"></mapping>
+    </list>
+</litepal>

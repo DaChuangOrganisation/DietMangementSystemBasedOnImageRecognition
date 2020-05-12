@@ -71,9 +71,14 @@ public class SuggestFragment extends Fragment implements RapidFloatingActionCont
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             loading.hide();
-            initRecyclerView();
+//            initRecyclerView();
         }
     };
+
+
+    public SuggestFragment() {
+        // Required empty public constructor
+    }
 
     private void initRecyclerView() {
         SuggestAdapter suggestAdapter = new SuggestAdapter(alllist, getContext());
@@ -96,9 +101,7 @@ public class SuggestFragment extends Fragment implements RapidFloatingActionCont
         suggestRecyclerView.setLayoutManager(layoutManager);
     }
 
-    public SuggestFragment() {
-        // Required empty public constructor
-    }
+
 
     public static SuggestFragment getInstance() {
         return new SuggestFragment();
@@ -110,14 +113,19 @@ public class SuggestFragment extends Fragment implements RapidFloatingActionCont
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_suggest, container, false);
         unbinder = ButterKnife.bind(this, view);
-        initFloating();
-        if(AVUser.getCurrentUser() == null){
-            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
-        }else {
-            getData();
-        }
+//        initFloating();
+//        if(AVUser.getCurrentUser() == null){
+//            Toast.makeText(getActivity(), "请先登录", Toast.LENGTH_SHORT).show();
+//        }else {
+//            getData();
+//        }
         return view;
     }
+
+    /*
+    Warning!!! Warning!!! Warning!!!
+    以下代码全是关于AVOS Cloud服务的调用,请勿调用这些函数，其他相关调用被注释，请勿解开注释，否则必定报错
+     */
 
     private void initFloating() {
         loading.show();

@@ -12,13 +12,13 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.administrator.kalulli.base.BaseActivity;
-import com.example.administrator.kalulli.ui.daily.DailyFragment;
-import com.example.administrator.kalulli.ui.me.MeFragment;
+import com.example.administrator.kalulli.litepal.FoodNutrition;
 import com.example.administrator.kalulli.ui.camera.StartCameraFragment;
+import com.example.administrator.kalulli.ui.daily.DailyFragment;
 import com.example.administrator.kalulli.ui.suggest.SuggestFragment;
 import com.example.administrator.kalulli.utils.ActivityUtils;
 import com.example.administrator.kalulli.utils.BottomNavigationViewHelper;
-
+import com.example.administrator.kalulli.litepal.NutritionUtil;
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
@@ -34,9 +34,9 @@ public class MainActivity extends BaseActivity {
         if (mSavedInstanceState==null){
             ActivityUtils.replaceFragmentToActivity(mFragmentManager, StartCameraFragment.getInstance(),R.id.content_main);
         }
-        if (mAVUserFinal == null){
-            toast("请先登录",0);
-        }
+//        if (mAVUserFinal == null){
+//            toast("请先登录",0);
+//        }
         int checkpermission = ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if (checkpermission != PackageManager.PERMISSION_GRANTED) {//没有给权限
@@ -58,9 +58,9 @@ public class MainActivity extends BaseActivity {
                     case R.id.daily_item:
                         ActivityUtils.replaceFragmentToActivity(mFragmentManager, DailyFragment.getInstance(),R.id.content_main);
                         break;
-                    case R.id.me_item:
-                        ActivityUtils.replaceFragmentToActivity(mFragmentManager, MeFragment.getInstance(),R.id.content_main);
-                        break;
+//                    case R.id.me_item:
+//                        ActivityUtils.replaceFragmentToActivity(mFragmentManager, MeFragment.getInstance(),R.id.content_main);
+//                        break;
                 }
                 return true;
             }
