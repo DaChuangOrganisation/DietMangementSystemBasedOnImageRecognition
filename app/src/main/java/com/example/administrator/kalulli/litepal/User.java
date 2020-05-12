@@ -42,6 +42,7 @@ public class User extends LitePalSupport implements DataManipulation {
 
     private long id; //用户id(自增,自赋值)
     private String name;//用户姓名
+    private double weight;//体重 kg
     private Gender gender;//性别
     private int age;// 年龄
     private double height;// cm单位制
@@ -50,12 +51,21 @@ public class User extends LitePalSupport implements DataManipulation {
     public User() {
     }
 
-    public User(String name,Gender gender, int age, double height, double calorie) {
+    public User(String name, double weight, Gender gender, int age, double height, double calorie) {
         this.name = name;
+        this.weight = weight;
         this.gender = gender;
         this.age = age;
         this.height = height;
         this.calorie = calorie;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 
     public Gender getGender() {
