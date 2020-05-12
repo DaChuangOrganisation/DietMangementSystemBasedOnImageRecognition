@@ -68,7 +68,7 @@ public class BasicInfoInpu extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                user
+//                userinfo
                 Intent it = new Intent(  );
                 it.setClass( BasicInfoInpu.this,MainActivity.class );
                 BasicInfoInpu.this.startActivity( it );
