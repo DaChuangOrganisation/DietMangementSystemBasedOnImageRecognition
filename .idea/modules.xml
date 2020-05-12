@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< Updated upstream
       <module fileurl="file://$PROJECT_DIR$/Kaluli-master.iml" filepath="$PROJECT_DIR$/Kaluli-master.iml" group="Kaluli-master" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Kaluli-master/app" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/DietMangementSystemBasedOnImageRecognition.iml" filepath="$PROJECT_DIR$/.idea/DietMangementSystemBasedOnImageRecognition.iml" group="DietMangementSystemBasedOnImageRecognition" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="DietMangementSystemBasedOnImageRecognition/app" />
+>>>>>>> Stashed changes
     </modules>
   </component>
 </project>
