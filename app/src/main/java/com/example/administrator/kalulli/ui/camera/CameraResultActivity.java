@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,6 +19,8 @@ import com.avos.avoscloud.SaveCallback;
 import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.BaseActivity;
 import com.example.administrator.kalulli.data.FoodJson;
+import com.example.administrator.kalulli.litepal.DailyCalorie;
+import com.example.administrator.kalulli.litepal.FoodItem;
 import com.example.administrator.kalulli.ui.adapter.CameraResultAdapter;
 import com.example.administrator.kalulli.utils.ComputerTypeUtil;
 import com.example.administrator.kalulli.utils.TableUtil;
@@ -27,6 +30,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -96,12 +100,37 @@ public class CameraResultActivity extends BaseActivity {
             list.add(foodJson);
             //Log.i(TAG, "logicActivity: "+ strings[7]);
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
         Log.i(TAG, "logicActivity: " + list.size());
         initRecyclerView();
+    }
+
+    /**
+     * 查询今日卡鲁里
+     */
+    public double getTodayCalorie() {
+        long todayMillis = TimeUtil.todayToMillis();
+        List<DailyCalorie> dailyCalories = LitePal
+                .where("date>=? and date<?",
+                        String.valueOf(todayMillis),
+                        String.valueOf(todayMillis + DateUtils.DAY_IN_MILLIS))
+                .find(DailyCalorie.class, true);
+
+        if (dailyCalories.size() > 0) {
+            DailyCalorie dailyCalorie = dailyCalories.get(0);
+            List<FoodItem> itemList = dailyCalorie.getItemList();
+            if (itemList != null) {
+                double sum = 0;
+                for (FoodItem foodItem : itemList) {
+                    sum += foodItem.getCalorie();
+                }
+                return sum;
+            }
+        }
+
+        return 0;
     }
 
     public void initRecyclerView() {
