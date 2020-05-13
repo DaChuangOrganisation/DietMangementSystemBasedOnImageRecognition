@@ -12,11 +12,9 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import com.example.administrator.kalulli.base.BaseActivity;
-//import com.example.administrator.kalulli.litepal.;
-import com.example.administrator.kalulli.litepal.Gender;
 import com.example.administrator.kalulli.litepal.User;
 
-public class BasicInfoInpu extends BaseActivity {
+public class BasicInfoInput extends BaseActivity {
     boolean sexinput = false;
     public boolean alreadyinput=false;
     @BindView( R.id.btn_confirm )
@@ -37,20 +35,20 @@ public class BasicInfoInpu extends BaseActivity {
     RadioGroup radioGroupsex;
     Integer sex=0;
     User userinfo = new User(  );
-    Gender gender1 ;
+    String gender1 ;
     String boolStr;
     private int selectRadioBtn(){
         RadioButton rb;
-        rb = (RadioButton) BasicInfoInpu.this.findViewById( radioGroupsex.getCheckedRadioButtonId());
+        rb = (RadioButton) BasicInfoInput.this.findViewById( radioGroupsex.getCheckedRadioButtonId());
         String choice = rb.getText().toString();
         int sex1;
         if(choice.equals( "男" ))
         {sex1 = 1; sexinput = true;
-            Toast.makeText( BasicInfoInpu.this, "已选择 男", Toast.LENGTH_LONG ).show();
+            Toast.makeText( BasicInfoInput.this, "已选择 男", Toast.LENGTH_LONG ).show();
         }
         else if(choice.equals( "女" ))
         {sex1 = 2; sexinput = true;
-            Toast.makeText( BasicInfoInpu.this, "已选择 女", Toast.LENGTH_LONG ).show();
+            Toast.makeText( BasicInfoInput.this, "已选择 女", Toast.LENGTH_LONG ).show();
 
         }
         else {
@@ -64,7 +62,7 @@ public class BasicInfoInpu extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         mContext = this;
-        Toast.makeText(BasicInfoInpu.this,"oncreate()", Toast.LENGTH_LONG).show();
+        Toast.makeText(BasicInfoInput.this,"oncreate()", Toast.LENGTH_LONG).show();
 
         radioGroupsex.setOnCheckedChangeListener( new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -91,16 +89,16 @@ public class BasicInfoInpu extends BaseActivity {
                 weight.getText().toString()!=null&&weight.getText().toString()!=""&&
                 sex!=null&&sex!=0
         ) {
-            Toast.makeText(BasicInfoInpu.this,"基本信息已填写！", Toast.LENGTH_LONG).show();
+            Toast.makeText(BasicInfoInput.this,"基本信息已填写！", Toast.LENGTH_LONG).show();
             usernameStr = username.getText().toString();
             ageInt = Integer.parseInt( age.getText().toString() );
             heightInt = Integer.parseInt( height.getText().toString() );
             weightInt = Integer.parseInt( weight.getText().toString() );
             if(sex==1){
-                gender1 = Gender.Male;
+                gender1 = "男";
             }
             else
-                gender1 = Gender.Female;
+                gender1 = "女";
 
                 userinfo.setAge( ageInt );
                 userinfo.setHeight( heightInt );
@@ -113,16 +111,16 @@ public class BasicInfoInpu extends BaseActivity {
             bl = true;
             boolStr = "true";
             SharePreUtil.put( mContext,"boolStr",boolStr );
-            Toast.makeText(BasicInfoInpu.this,"boolStr==true！", Toast.LENGTH_LONG).show();
+            Toast.makeText(BasicInfoInput.this,"boolStr==true！", Toast.LENGTH_LONG).show();
 
             Intent it = new Intent(  );
-            it.setClass( BasicInfoInpu.this,MainActivity.class );
-            BasicInfoInpu.this.startActivity( it );
+            it.setClass( BasicInfoInput.this,MainActivity.class );
+            BasicInfoInput.this.startActivity( it );
             mActivity.finish();
         }
         else{
 
-            Toast.makeText(BasicInfoInpu.this,"请填写基本信息！", Toast.LENGTH_LONG).show();
+            Toast.makeText(BasicInfoInput.this,"请填写基本信息！", Toast.LENGTH_LONG).show();
 
         }
     }

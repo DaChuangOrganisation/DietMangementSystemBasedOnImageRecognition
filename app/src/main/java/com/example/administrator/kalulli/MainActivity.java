@@ -12,18 +12,11 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.administrator.kalulli.base.BaseActivity;
-import com.example.administrator.kalulli.litepal.DailyCalorie;
-import com.example.administrator.kalulli.litepal.FoodItem;
-import com.example.administrator.kalulli.litepal.FoodNutrition;
-import com.example.administrator.kalulli.litepal.User;
 import com.example.administrator.kalulli.ui.camera.StartCameraFragment;
 import com.example.administrator.kalulli.ui.daily.DailyFragment;
 import com.example.administrator.kalulli.ui.suggest.SuggestFragment;
 import com.example.administrator.kalulli.utils.ActivityUtils;
 import com.example.administrator.kalulli.utils.BottomNavigationViewHelper;
-import com.example.administrator.kalulli.litepal.NutritionUtil;
-
-import org.litepal.LitePal;
 
 import butterknife.BindView;
 
@@ -52,12 +45,6 @@ public class MainActivity extends BaseActivity {
             //参数分别是当前活动，权限字符串数组，requestcode
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
-
-//        User user = new User("zs",55, Gender.Male,20,170,2550);
-//        user.saveOrUpdateData();
-//        User user = LitePal.find(User.class,2);
-//        Log.d(TAG,user.getGender());
-
         BottomNavigationViewHelper.disableShiftMode(bottomMenu);
         bottomMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
