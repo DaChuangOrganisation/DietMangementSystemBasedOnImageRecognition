@@ -95,10 +95,6 @@ public class DailyCalorie extends LitePalSupport implements DataManipulation {
         return itemList;
     }
 
-    public void setItemList(List<FoodItem> itemList) {
-        this.itemList = itemList;
-    }
-
     public long getId() {
         return id;
     }

@@ -6,8 +6,14 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.GetCallback;
+import com.example.administrator.kalulli.litepal.DailyCalorie;
 
+import org.litepal.LitePal;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -151,6 +157,20 @@ public class DailyUtil {
             }
         });
         return list;
+    }
+    public static List<DailyCalorie> getDailyFoodList() throws ParseException {
+        //获取今日首尾时间戳
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss:SSS");
+        SimpleDateFormat tft = new SimpleDateFormat ("yyyy-MM-dd");
+        Date date = new Date();
+        long startTime = ft.parse(tft.format(date)+" 00:00:00:000").getTime();
+        long endTime = ft.parse(tft.format(date)+" 23:59:59:999").getTime();
+        Log.i(TAG,"starttime"+date);
+        Log.i(TAG,"endtime"+endTime);
+        List<DailyCalorie> dcList= LitePal.where("date>=? and date<=?",String.valueOf(startTime),String.valueOf(endTime))
+                .find(DailyCalorie.class,true);
+        Log.i(TAG,"listsize"+dcList.size());
+        return dcList;
     }
 
 }

@@ -12,7 +12,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -25,6 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.daily.DailyDetailActivity"></activity>
         <activity android:name=".MainActivity" />
         <activity
             android:name=".SplashActivity"
@@ -43,7 +45,7 @@
         <activity android:name=".ui.suggest.ShowFoodActivity" />
         <activity android:name=".ui.me.ChangeInfoActivity" />
         <activity android:name=".ui.daily.DailyWeightActivity" />
-        <activity android:name=".ui.suggest.SuggestDailyActivity"></activity>
+        <activity android:name=".ui.suggest.SuggestDailyActivity" />
     </application>
 
 </manifest>

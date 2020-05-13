@@ -57,7 +57,8 @@
     <RelativeLayout
         android:background="#ffff"
         android:layout_width="match_parent"
-        android:layout_height="75dp">
+        android:layout_height="75dp"
+        android:id="@+id/Breakfast_btn">
 
         <TextView
             android:textColor="#3d3d3d"
@@ -85,7 +86,8 @@
     <RelativeLayout
         android:background="#ffff"
         android:layout_width="match_parent"
-        android:layout_height="75dp">
+        android:layout_height="75dp"
+        android:id="@+id/Lunch_btn">
 
         <TextView
             android:textColor="#3d3d3d"
@@ -112,7 +114,8 @@
     <RelativeLayout
         android:background="#ffff"
         android:layout_width="match_parent"
-        android:layout_height="75dp">
+        android:layout_height="75dp"
+        android:id="@+id/Dinner_btn">
 
         <TextView
             android:textColor="#3d3d3d"

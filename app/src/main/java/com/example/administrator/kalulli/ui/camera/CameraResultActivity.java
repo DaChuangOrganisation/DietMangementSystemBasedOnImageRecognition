@@ -15,6 +15,9 @@ import com.avos.avoscloud.SaveCallback;
 import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.BaseActivity;
 import com.example.administrator.kalulli.data.FoodJson;
+import com.example.administrator.kalulli.litepal.FoodItem;
+import com.example.administrator.kalulli.litepal.DailyCalorie;
+
 import com.example.administrator.kalulli.ui.adapter.CameraResultAdapter;
 import com.example.administrator.kalulli.utils.ComputerTypeUtil;
 import com.example.administrator.kalulli.utils.TableUtil;
@@ -27,6 +30,7 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,6 +56,12 @@ public class CameraResultActivity extends BaseActivity {
 
     }
 
+//    //手动编数据测试识别之后的功能
+//    private void getData(){
+//        loadingPut.hide();
+//
+//    }
+
     private void getData() {
         loadingPut.hide();
         Bundle bundle = getIntent().getExtras();
@@ -62,19 +72,22 @@ public class CameraResultActivity extends BaseActivity {
             JSONArray jsonArray = object.getJSONArray("result");    //获取返回json中的result数组信息
             Log.i(TAG, "logicActivity: " + jsonArray.length());
             JSONObject object1 = (JSONObject) jsonArray.get(0);            //result数组信息的第一个信息，即置信度最高的菜品信息(简称result信息)
-            String object2 = object1.getString("baike_info");       //返回result中的百科信息
-            Log.i(TAG, "getData: "+object2);
-            String[] strings = object2.split("\"");
-            Log.i(TAG, "logicActivity: " + strings.length);
-            if (strings.length > 5) {
-                description = strings[11];
-            }
+
+//            String object2 = object1.getString("baike_info");       //返回result中的百科信息
+//            Log.i(TAG, "getData: "+object2);
+//            String[] strings = object2.split("\"");
+//            Log.i(TAG, "logicActivity: " + strings.length);
+//            if (strings.length > 5) {
+//                description = strings[11];
+//            }
+            //获得description似乎有点问题
+            description="cxl";
+
             FoodJson foodJson = new FoodJson(object1.getString("name"),
                     object1.getString("calorie"),
                     bundle.getString("str"),    //str是图片地址
                     description);
             list.add(foodJson);
-            //Log.i(TAG, "logicActivity: "+ strings[7]);
 
 
         } catch (JSONException e) {
@@ -95,6 +108,31 @@ public class CameraResultActivity extends BaseActivity {
         return R.layout.activity_camera_result;
     }
 
+    @OnClick(R.id.button)
+    public void onViewClicked(){
+        loadingPut.show();
+        Log.i(TAG, "onViewClicked: click");
+        try{
+            FoodJson tFoodJson=list.get(0);
+            Date date=new Date();
+            FoodItem item1=new FoodItem(tFoodJson.getFoodname(),Double.parseDouble(tFoodJson.getNumber()),date,tFoodJson.getPicture_url());
+            DailyCalorie dc1 = new DailyCalorie();
+            item1.saveOrUpdateData();
+            dc1.getItemList().add(item1);
+            item1.setDailyCalorie(dc1);
+            dc1.setDate(new Date());
+            dc1.setTotalIntake(dc1.getTotalIntake()+item1.getCalorie());
+            dc1.saveOrUpdateData();
+            loadingPut.hide();
+            toast("提交成功", 0);
+            Log.i(TAG, "onViewClicked: click "+ dc1.getDate());
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+/*
     @OnClick(R.id.button)
     public void onViewClicked() {
         loadingPut.show();
@@ -231,5 +269,5 @@ public class CameraResultActivity extends BaseActivity {
 
 
     }
-
+*/
 }

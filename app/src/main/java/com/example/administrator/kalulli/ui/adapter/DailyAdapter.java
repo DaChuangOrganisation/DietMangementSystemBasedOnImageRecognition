@@ -88,4 +88,5 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
             ButterKnife.bind(this, view);
         }
     }
+
 }
