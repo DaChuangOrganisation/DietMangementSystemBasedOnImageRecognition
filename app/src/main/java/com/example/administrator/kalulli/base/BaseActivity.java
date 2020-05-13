@@ -1,6 +1,7 @@
 package com.example.administrator.kalulli.base;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -10,26 +11,28 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVUser;
+import com.example.administrator.kalulli.SharePreUtil;
 
 import butterknife.ButterKnife;
 
-/**
- * Created by Administrator on 2019/3/30.
- */
 
 public abstract class BaseActivity extends AppCompatActivity {
     protected FragmentManager mFragmentManager;
     protected Activity mActivity;
     protected AVUser mAVUserFinal;
     public static boolean bl=false;
+    public Context mContext;
+//    public SharePreUtil SpUtil;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         ButterKnife.bind(this);
         mFragmentManager = getSupportFragmentManager();
-        mActivity = this;
 //        mAVUserFinal = AVUser.getCurrentUser();
+        mContext = this;
+
         logicActivity(savedInstanceState);
     }
 

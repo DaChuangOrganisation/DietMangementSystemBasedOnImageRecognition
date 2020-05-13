@@ -16,8 +16,6 @@ import com.example.administrator.kalulli.base.BaseActivity;
 import com.example.administrator.kalulli.litepal.Gender;
 import com.example.administrator.kalulli.litepal.User;
 
-import static com.avos.avoscloud.LogUtil.log.show;
-
 public class BasicInfoInpu extends BaseActivity {
     boolean sexinput = false;
     public boolean alreadyinput=false;
@@ -38,8 +36,9 @@ public class BasicInfoInpu extends BaseActivity {
     @BindView( R.id.radioGroup_sex_id )
     RadioGroup radioGroupsex;
     Integer sex=0;
-    User userinfo = null;
-    Gender gender1 = null;
+    User userinfo = new User(  );
+    Gender gender1 ;
+    String boolStr;
     private int selectRadioBtn(){
         RadioButton rb;
         rb = (RadioButton) BasicInfoInpu.this.findViewById( radioGroupsex.getCheckedRadioButtonId());
@@ -64,6 +63,9 @@ public class BasicInfoInpu extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
+        mContext = this;
+        Toast.makeText(BasicInfoInpu.this,"oncreate()", Toast.LENGTH_LONG).show();
+
         radioGroupsex.setOnCheckedChangeListener( new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -83,9 +85,13 @@ public class BasicInfoInpu extends BaseActivity {
     }
     public void saveuserinfo(){
 
-        if(username.getText().toString()!=null&&age.getText().toString()!=null&&
-                height.getText().toString()!=null&&weight.getText().toString()!=null&&sex!=null&&sex!=0
+        if(username.getText().toString()!=null&&username.getText().toString()!=""&&
+                age.getText().toString()!=null&&age.getText().toString()!=""&&
+                height.getText().toString()!=null&&height.getText().toString()!=""&&
+                weight.getText().toString()!=null&&weight.getText().toString()!=""&&
+                sex!=null&&sex!=0
         ) {
+            Toast.makeText(BasicInfoInpu.this,"基本信息已填写！", Toast.LENGTH_LONG).show();
             usernameStr = username.getText().toString();
             ageInt = Integer.parseInt( age.getText().toString() );
             heightInt = Integer.parseInt( height.getText().toString() );
@@ -105,6 +111,10 @@ public class BasicInfoInpu extends BaseActivity {
 
             userinfo.saveOrUpdateData();
             bl = true;
+            boolStr = "true";
+            SharePreUtil.put( mContext,"boolStr",boolStr );
+            Toast.makeText(BasicInfoInpu.this,"boolStr==true！", Toast.LENGTH_LONG).show();
+
             Intent it = new Intent(  );
             it.setClass( BasicInfoInpu.this,MainActivity.class );
             BasicInfoInpu.this.startActivity( it );
@@ -118,11 +128,29 @@ public class BasicInfoInpu extends BaseActivity {
     }
     @Override
     protected void logicActivity(Bundle mSavedInstanceState) {
+//        if(SharePreUtil.get( mContext, "boolStr","")!=null&&SharePreUtil.get( mContext, "boolStr","").toString().equals( "true" )) {
+//            alreInput = SharePreUtil.get( mContext, "boolStr", "" ).toString();
+//            Toast.makeText( BasicInfoInpu.this, "Spalshactivity:boolStr= " + alreInput, Toast.LENGTH_LONG ).show();
+//        }
+//        else{
+//            Toast.makeText( BasicInfoInpu.this, "Spalshactivity:boolStr= " + alreInput, Toast.LENGTH_LONG ).show();
+//        }
+//        if(alreInput.equals( "true" )){
+//            Intent it = new Intent(  );
+//            it.setClass( BasicInfoInpu.this,MainActivity.class );
+//            BasicInfoInpu.this.startActivity( it );
+//            mActivity.finish();
+//        }
 
     }
 
     @Override
     protected int getLayoutId() {
         return R.layout.info_input;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 }
