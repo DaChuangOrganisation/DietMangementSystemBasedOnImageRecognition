@@ -107,32 +107,6 @@ public class CameraResultActivity extends BaseActivity {
         initRecyclerView();
     }
 
-    /**
-     * 查询今日卡鲁里
-     */
-    public double getTodayCalorie() {
-        long todayMillis = TimeUtil.todayToMillis();
-        List<DailyCalorie> dailyCalories = LitePal
-                .where("date>=? and date<?",
-                        String.valueOf(todayMillis),
-                        String.valueOf(todayMillis + DateUtils.DAY_IN_MILLIS))
-                .find(DailyCalorie.class, true);
-
-        if (dailyCalories.size() > 0) {
-            DailyCalorie dailyCalorie = dailyCalories.get(0);
-            List<FoodItem> itemList = dailyCalorie.getItemList();
-            if (itemList != null) {
-                double sum = 0;
-                for (FoodItem foodItem : itemList) {
-                    sum += foodItem.getCalorie();
-                }
-                return sum;
-            }
-        }
-
-        return 0;
-    }
-
     public void initRecyclerView() {
         resultRecyclerView.setLayoutManager(linearLayoutManager);
         CameraResultAdapter cameraResultAdapter = new CameraResultAdapter(this, list);

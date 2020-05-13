@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,15 @@ import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.example.administrator.kalulli.R;
+import com.example.administrator.kalulli.litepal.DailyCalorie;
+import com.example.administrator.kalulli.litepal.FoodItem;
+import com.example.administrator.kalulli.litepal.User;
 import com.example.administrator.kalulli.utils.HealthUtil;
 import com.example.administrator.kalulli.utils.TableUtil;
 import com.example.administrator.kalulli.utils.TimeUtil;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.litepal.LitePal;
 
 import java.util.List;
 
@@ -96,55 +102,94 @@ public class DailyFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         loading.hide();
         dailyDateTv.setText(TimeUtil.getDate());
-//        getData();
+        getData();
         return view;
     }
 
-    private void getData() {
-        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_TABLE_NAME);
-        query.whereEqualTo(TableUtil.DAILY_USER, AVUser.getCurrentUser());
-        query.whereEqualTo(TableUtil.DAILY_DATE, TimeUtil.getDate());
-        // 如果这样写，第二个条件将覆盖第一个条件，查询只会返回 priority = 1 的结果
-        query.findInBackground(new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> list, AVException e) {
-                if (e == null) {
-                    if (list == null || list.size() == 0) {
-                        morningTv.setText("未摄取");
-                        afternoonTv.setText("未摄取");
-                        eveningTv.setText("未摄取");
-                        dailyMoreTv.setText((int) Double.parseDouble(HealthUtil.getKC()) + "千卡");
-                    } else {
-                        AVObject avObject = list.get(0);
-                        id = avObject.getObjectId();
-                        double sum = 0.0;
-                        if (avObject.get(TableUtil.DAILY_MORNING) != null && !avObject.get(TableUtil.DAILY_MORNING).equals("")) {
-                            morningTv.setText(avObject.get(TableUtil.DAILY_MORNING).toString());
-                            sum += Double.parseDouble(avObject.get(TableUtil.DAILY_MORNING).toString());
-                        } else {
-                            sum += 0;
-                        }
-                        if (avObject.get(TableUtil.DAILY_AFTERNOON) != null && !avObject.get(TableUtil.DAILY_AFTERNOON).equals("")) {
-                            afternoonTv.setText(avObject.get(TableUtil.DAILY_AFTERNOON).toString());
-                            sum += Double.parseDouble(avObject.get(TableUtil.DAILY_AFTERNOON).toString());
-                        } else {
-                            sum += 0;
-                        }
-                        if (avObject.get(TableUtil.DAILY_EVENING) != null && !avObject.get(TableUtil.DAILY_EVENING).equals("")) {
-                            eveningTv.setText(avObject.get(TableUtil.DAILY_EVENING).toString());
-                            sum += Double.parseDouble(avObject.get(TableUtil.DAILY_EVENING).toString());
-                        } else {
-                            sum += 0;
-                        }
-                        dailyMoreTv.setText((int)Double.parseDouble(HealthUtil.getKC()) - sum + "千卡");
-                    }
+    /**
+     * 查询今日已经摄入的卡鲁里
+     */
+    public double getTodayCalorie() {
+        long todayMillis = TimeUtil.todayToMillis();
+        List<DailyCalorie> dailyCalories = LitePal
+                .where("date>=? and date<?",
+                        String.valueOf(todayMillis),
+                        String.valueOf(todayMillis + DateUtils.DAY_IN_MILLIS))
+                .find(DailyCalorie.class, true);
 
-                } else {
-                    Log.e(TAG, "done: " + e.getMessage());
-                }
-            }
-        });
+        if (dailyCalories.size() > 0) {
+            return dailyCalories.get(0).getTotalIntake();
+        }
+
+        return 0;
     }
+
+    /**
+     * 基于用户的信息，计算用户每日所需的卡路里。
+     */
+    private double getKC() {
+        User user = LitePal.findFirst(User.class, true);
+        if (user != null) {
+            return HealthUtil.getKC(user.getHeight(), user.getWeight(), user.getAge(), user.getGender().getName());
+        }
+        return 0.0;
+    }
+
+    private void getData() {
+
+        // 用户今日还需摄入的卡路里
+        double finalNeedCalorie = getTodayCalorie() - getKC();
+        if (finalNeedCalorie > 0) {
+            dailyMoreTv.setText(String.format("%s 千卡", finalNeedCalorie));
+        } else {
+            dailyMoreTv.setText("0 千卡");
+        }
+
+//        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_TABLE_NAME);
+//        query.whereEqualTo(TableUtil.DAILY_USER, AVUser.getCurrentUser());
+//        query.whereEqualTo(TableUtil.DAILY_DATE, TimeUtil.getDate());
+//        // 如果这样写，第二个条件将覆盖第一个条件，查询只会返回 priority = 1 的结果
+//        query.findInBackground(new FindCallback<AVObject>() {
+//            @Override
+//            public void done(List<AVObject> list, AVException e) {
+//                if (e == null) {
+//                    if (list == null || list.size() == 0) {
+//                        morningTv.setText("未摄取");
+//                        afternoonTv.setText("未摄取");
+//                        eveningTv.setText("未摄取");
+//                        dailyMoreTv.setText((int) Double.parseDouble(HealthUtil.getKC()) + "千卡");
+//                    } else {
+//                        AVObject avObject = list.get(0);
+//                        id = avObject.getObjectId();
+//                        double sum = 0.0;
+//                        if (avObject.get(TableUtil.DAILY_MORNING) != null && !avObject.get(TableUtil.DAILY_MORNING).equals("")) {
+//                            morningTv.setText(avObject.get(TableUtil.DAILY_MORNING).toString());
+//                            sum += Double.parseDouble(avObject.get(TableUtil.DAILY_MORNING).toString());
+//                        } else {
+//                            sum += 0;
+//                        }
+//                        if (avObject.get(TableUtil.DAILY_AFTERNOON) != null && !avObject.get(TableUtil.DAILY_AFTERNOON).equals("")) {
+//                            afternoonTv.setText(avObject.get(TableUtil.DAILY_AFTERNOON).toString());
+//                            sum += Double.parseDouble(avObject.get(TableUtil.DAILY_AFTERNOON).toString());
+//                        } else {
+//                            sum += 0;
+//                        }
+//                        if (avObject.get(TableUtil.DAILY_EVENING) != null && !avObject.get(TableUtil.DAILY_EVENING).equals("")) {
+//                            eveningTv.setText(avObject.get(TableUtil.DAILY_EVENING).toString());
+//                            sum += Double.parseDouble(avObject.get(TableUtil.DAILY_EVENING).toString());
+//                        } else {
+//                            sum += 0;
+//                        }
+//                        dailyMoreTv.setText((int) Double.parseDouble(HealthUtil.getKC()) - sum + "千卡");
+//                    }
+//
+//                } else {
+//                    Log.e(TAG, "done: " + e.getMessage());
+//                }
+//            }
+//        });
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -174,7 +219,7 @@ public class DailyFragment extends Fragment {
 
     @OnClick(R.id.weight_btn)
     public void onViewClicked2() {
-        Intent intent = new Intent(getContext(),DailyWeightActivity.class);
+        Intent intent = new Intent(getContext(), DailyWeightActivity.class);
         startActivity(intent);
     }
 }
