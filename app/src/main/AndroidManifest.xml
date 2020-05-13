@@ -34,7 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BasicInfoInpu"/>
+        <activity android:name=".BasicInfoInput"/>
         <activity android:name=".ui.me.RegisterActivity" />
         <activity android:name=".ui.me.LoginActivity" />
         <activity android:name=".ui.camera.CameraResultActivity" />

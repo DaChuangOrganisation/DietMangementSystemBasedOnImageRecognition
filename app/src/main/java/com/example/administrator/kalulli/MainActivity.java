@@ -12,13 +12,12 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.administrator.kalulli.base.BaseActivity;
-import com.example.administrator.kalulli.litepal.FoodNutrition;
 import com.example.administrator.kalulli.ui.camera.StartCameraFragment;
 import com.example.administrator.kalulli.ui.daily.DailyFragment;
 import com.example.administrator.kalulli.ui.suggest.SuggestFragment;
 import com.example.administrator.kalulli.utils.ActivityUtils;
 import com.example.administrator.kalulli.utils.BottomNavigationViewHelper;
-import com.example.administrator.kalulli.litepal.NutritionUtil;
+
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
