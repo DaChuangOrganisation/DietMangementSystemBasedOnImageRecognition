@@ -31,10 +31,10 @@
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BasicInfoInpu"/>
         <activity android:name=".ui.me.RegisterActivity" />
         <activity android:name=".ui.me.LoginActivity" />
         <activity android:name=".ui.camera.CameraResultActivity" />
@@ -43,7 +43,12 @@
         <activity android:name=".ui.suggest.ShowFoodActivity" />
         <activity android:name=".ui.me.ChangeInfoActivity" />
         <activity android:name=".ui.daily.DailyWeightActivity" />
-        <activity android:name=".ui.suggest.SuggestDailyActivity"></activity>
+        <activity android:name=".ui.suggest.SuggestDailyActivity">
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
