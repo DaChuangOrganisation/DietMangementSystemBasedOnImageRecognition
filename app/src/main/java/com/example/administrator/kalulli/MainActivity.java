@@ -31,6 +31,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void logicActivity(Bundle mSavedInstanceState) {
+        SharePreUtil.put( mContext,"boolStr","true" );
+
         if (mSavedInstanceState==null){
             ActivityUtils.replaceFragmentToActivity(mFragmentManager, StartCameraFragment.getInstance(),R.id.content_main);
         }
