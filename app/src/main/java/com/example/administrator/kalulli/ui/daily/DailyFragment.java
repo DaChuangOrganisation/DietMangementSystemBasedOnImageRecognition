@@ -130,7 +130,7 @@ public class DailyFragment extends Fragment {
     private double getKC() {
         User user = LitePal.findFirst(User.class, true);
         if (user != null) {
-            return HealthUtil.getKC(user.getHeight(), user.getWeight(), user.getAge(), user.getGender().getName());
+            return HealthUtil.getKC(user.getHeight(), user.getWeight(), user.getAge(), user.getGender());
         }
         return 0.0;
     }

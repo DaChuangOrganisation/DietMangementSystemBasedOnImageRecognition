@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Administrator on 2019/5/18.
@@ -47,11 +48,19 @@ public class TimeUtil {
     /**
      * 将日期转换为该日期0时0分0秒与1970/1/1 00:00:00 GMT的相差的毫秒数
      * example: 2020/5/11 -> 1586534400000
-     *
      */
     public static long dayToMillis(Date date) throws ParseException {
         String format = SimpleDateFormat.getDateInstance().format(date);
         return SimpleDateFormat.getDateInstance().parse(format).getTime();
     }
 
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.dd", Locale.CHINA);
+
+    public static String dateToFloat(Date date) {
+        return simpleDateFormat.format(date);
+    }
+
+    public static String dateToFloat(long date) {
+        return simpleDateFormat.format(new Date(date));
+    }
 }
