@@ -17,6 +17,7 @@ import com.example.administrator.kalulli.ui.daily.DailyFragment;
 import com.example.administrator.kalulli.ui.suggest.SuggestFragment;
 import com.example.administrator.kalulli.utils.ActivityUtils;
 import com.example.administrator.kalulli.utils.BottomNavigationViewHelper;
+import com.example.administrator.kalulli.utils.TestUtil;
 
 import butterknife.BindView;
 
@@ -35,9 +36,6 @@ public class MainActivity extends BaseActivity {
         if (mSavedInstanceState==null){
             ActivityUtils.replaceFragmentToActivity(mFragmentManager, StartCameraFragment.getInstance(),R.id.content_main);
         }
-//        if (mAVUserFinal == null){
-//            toast("请先登录",0);
-//        }
         int checkpermission = ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if (checkpermission != PackageManager.PERMISSION_GRANTED) {//没有给权限
@@ -66,7 +64,7 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
         });
-
+//        TestUtil.test(this);//用于测试
     }
 
     @Override
