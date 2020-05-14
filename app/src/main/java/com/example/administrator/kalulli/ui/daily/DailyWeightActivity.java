@@ -260,6 +260,6 @@ public class DailyWeightActivity extends BaseActivity {
 
     @OnClick(R.id.back_daily_img)
     public void onViewClicked2() {
-        mActivity.finish();
+        this.finish();
     }
 }
