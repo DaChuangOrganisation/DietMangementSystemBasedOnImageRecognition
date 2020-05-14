@@ -7,8 +7,6 @@ import android.widget.Toast;
 
 import com.example.administrator.kalulli.base.BaseActivity;
 
-import org.apache.log4j.chainsaw.Main;
-
 public class SplashActivity extends BaseActivity {
 
     private static final String TAG = "SplashActivity";
@@ -39,7 +37,7 @@ public class SplashActivity extends BaseActivity {
                 else{
                     try {
                         Thread.sleep( 500 );
-                        Intent intent = new Intent( getApplication(), BasicInfoInpu.class );
+                        Intent intent = new Intent( getApplication(), BasicInfoInput.class );
                         startActivity( intent );
                         mActivity.finish();
                     } catch (InterruptedException e) {
