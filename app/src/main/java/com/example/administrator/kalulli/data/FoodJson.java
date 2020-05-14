@@ -1,5 +1,9 @@
 package com.example.administrator.kalulli.data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Created by Administrator on 2019/4/1.
  */
@@ -9,6 +13,7 @@ public class FoodJson {
     private String number;
     private String picture_url;
     private String description;
+    private List<Element> elements = new ArrayList<>();
 
     public FoodJson(String foodname, String number, String picture_url, String description) {
         this.foodname = foodname;
@@ -47,5 +52,47 @@ public class FoodJson {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Element> getElements() {
+        return elements;
+    }
+
+    public void setElements(List<Element> elements) {
+        this.elements = elements;
+    }
+
+    public static class Element {
+        private String name;
+        private String value;
+
+        public Element(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+    public void push(String name, String value) {
+        this.elements.add(new Element(name, value));
+    }
+
+    public void clear() {
+        this.elements.clear();
     }
 }

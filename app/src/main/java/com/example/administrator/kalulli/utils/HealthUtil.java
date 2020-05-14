@@ -44,17 +44,23 @@ public class HealthUtil {
                 act = 1.3;
             } else {
                 act = 1.2;
-            }if (sex == "男"){
-                return  (660+ 1.37 * weight + 5 * height - 6.8 * age ) * act+"";
-            }else {
-                return  (655 + 9.6 * weight + 1.9 * height - 4.7 * age ) * act+"";
+            }
+            if (sex == "男") {
+                return (660 + 1.37 * weight + 5 * height - 6.8 * age) * act + "";
+            } else {
+                return (655 + 9.6 * weight + 1.9 * height - 4.7 * age) * act + "";
 
             }
 
         } else {
-            return  0+"";
+            return 0 + "";
         }
     }
 
-
+    /**
+     * 输入身高，体重，年龄，性别，根据公式进行计算，得出每日所需卡路里，单位千卡（kac）
+     */
+    public static double getKC(double height, double weight, int age, String sex) {
+        return ("男".equals(sex) ? (660 + 1.37 * weight + 5 * height - 6.8 * age) : (655 + 9.6 * weight + 1.9 * height - 4.7 * age)) * 1.2;
+    }
 }
