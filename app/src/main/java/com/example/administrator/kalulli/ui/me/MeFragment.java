@@ -22,6 +22,7 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
+import com.example.administrator.kalulli.BasicInfoInpu;
 import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.OnClickListener;
 import com.example.administrator.kalulli.ui.adapter.DailyAdapter;
@@ -47,7 +48,7 @@ public class MeFragment extends Fragment {
     ImageView imageButton;
     @BindView(R.id.imageButton2)
     ImageView imageButton2;
-    @BindView(R.id.textView)
+    @BindView(R.id.updateInfoTV)
     TextView textView;
     @BindView(R.id.daily_recyclerView)
     RecyclerView dailyRecyclerView;
@@ -75,41 +76,17 @@ public class MeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         unbinder = ButterKnife.bind(this, view);
-        getData();
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),ChangeInfoActivity.class);
+                Intent intent = new Intent(getContext(), UpdateInfo.class);
                 startActivity(intent);
             }
         });
         return view;
     }
 
-    private void getData() {
-        AVUser avUser = AVUser.getCurrentUser();
-        if (avUser != null){
-            textView.setText(avUser.getUsername());
-            AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_FOOD_TABLE_NAME);
-            query.whereEqualTo(TableUtil.DAILY_FOOD_USER, avUser);
-            // 如果这样写，第二个条件将覆盖第一个条件，查询只会返回 priority = 1 的结果
-            query.findInBackground(new FindCallback<AVObject>() {
-                @Override
-                public void done(List<AVObject> list, AVException e) {
-                    if (e == null){
-                        meList = list;
-                        handler.sendEmptyMessage(0);
-                        Log.i(TAG, "done: "+ list.size());
-                    }else {
-                        Log.e(TAG, "done: "+e.getMessage() );
-                    }
-                }
-            });
 
-        }else {
-            textView.setText("请登录");
-        }
-    }
 
 
     public void initRecyclerView(){
@@ -133,23 +110,17 @@ public class MeFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.imageButton)
-    public void onImageButtonClicked() {
-        Log.i(TAG, "onImageButtonClicked: "+"click login");
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivityForResult(intent,200);
-    }
 
     @OnClick(R.id.imageButton2)
     public void onImageButton2Clicked() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("提示：");
-        builder.setMessage("是否退出登录");
+        builder.setMessage("是否退出程序");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 AVUser.logOut();
-                getData();
+
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -164,6 +135,6 @@ public class MeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        getData();
+
     }
 }
