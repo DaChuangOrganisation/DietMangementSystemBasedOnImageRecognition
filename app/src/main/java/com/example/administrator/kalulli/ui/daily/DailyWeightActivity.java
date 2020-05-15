@@ -8,10 +8,12 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
@@ -57,7 +59,7 @@ import butterknife.OnClick;
 public class DailyWeightActivity extends BaseActivity {
 
     private static final String TAG = "DailyWeightActivity";
-//    @BindView(R.id.weight_et)
+    //    @BindView(R.id.weight_et)
 //    EditText weightEt;
 //    @BindView(R.id.send_btn)
 //    Button send_btn;
@@ -65,6 +67,9 @@ public class DailyWeightActivity extends BaseActivity {
     LineChart chart;
     @BindView(R.id.back_daily_img)
     ImageView backDailyImg;
+    @BindView(R.id.tip_tv)
+    TextView tipTv;
+
     private List<Entry> entries = new ArrayList<>();
     private List<String> meList = new ArrayList<>();
     private LineDataSet dataSet;
@@ -107,6 +112,12 @@ public class DailyWeightActivity extends BaseActivity {
 //            dailyCalorie.setTotalIntake((15 - i) * 10);
 //            dailyCalories.add(dailyCalorie);
 //        }
+
+        if (dailyCalories.size() == 0) {
+            tipTv.setText("最近15天没有卡路里相关数据");
+            chart.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         // 以日期为key, 每日卡路里总量为value, 构建哈希表，目的是消除属于同一天的多个DailyCalorie
         HashMap<String, Double> hashMap = new HashMap<>();
