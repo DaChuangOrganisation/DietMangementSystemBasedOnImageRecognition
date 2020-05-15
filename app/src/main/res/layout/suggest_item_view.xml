@@ -6,7 +6,7 @@
     android:layout_margin="3dp"
     android:background="#ffff"
     android:orientation="vertical"
-    android:layout_height="310dp">
+    android:layout_height="330dp">
     <LinearLayout
 
         android:orientation="vertical"
@@ -17,13 +17,13 @@
             android:background="#ffff"
             android:layout_weight="3"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="70dp">
             <ImageView
                 android:layout_gravity="center"
                 android:src="@drawable/eat"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="match_parent" />
+                android:layout_height="40dp" />
             <TextView
                 android:id="@+id/food_name_item"
                 android:paddingTop="4dp"
@@ -35,7 +35,6 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
         <ImageView
-
             android:id="@+id/food_img_item"
             android:background="#ffff"
             android:src="@drawable/item_suggest"
@@ -59,6 +58,6 @@
             android:text="食物适合完成吃完饭后进行使用"
             android:background="#ffff"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="60dp" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

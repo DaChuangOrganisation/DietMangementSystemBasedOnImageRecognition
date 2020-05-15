@@ -9,14 +9,34 @@ public class Recommendation extends LitePalSupport implements DataManipulation {
     String classification;//食物所属类别
     String name;//食物名称
     double calorie;//所含卡路里
+    String imgUrl;//食物图片链接
+    String remark;//食物评价
 
     public Recommendation() {
     }
 
-    public Recommendation(String classification, String name, double calorie) {
+    public Recommendation(String classification, String name, double calorie, String imgUrl, String remark) {
         this.classification = classification;
         this.name = name;
         this.calorie = calorie;
+        this.imgUrl = imgUrl;
+        this.remark = remark;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public long getId() {

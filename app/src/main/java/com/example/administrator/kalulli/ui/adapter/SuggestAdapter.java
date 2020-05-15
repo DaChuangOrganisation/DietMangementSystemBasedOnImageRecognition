@@ -52,9 +52,9 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Recommendation recommendation = list.get(position);
         String foodName = recommendation.getName();
-        String imgUrl = "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=274237353,3834500759&fm=26&gp=0.jpg";
+        String imgUrl = recommendation.getImgUrl();
         String foodType = recommendation.getClassification();
-        String foodInfo = "null";
+        String foodInfo = recommendation.getRemark();
         holder.foodInfoItem.setText(foodInfo);
         holder.foodNameItem.setText(foodName);
         holder.foodTypeItem.setText("#"+foodType);

@@ -18,10 +18,13 @@ public class ExcelUtil {
         try {
             String pattern1 = "：[0-9]{2,3}";
             String pattern2 = "[0-9]{2,3}";
+            String pattern3 = "";
             Pattern r1 = Pattern.compile(pattern1);
             Pattern r2 = Pattern.compile(pattern2);
+            Pattern r3 = Pattern.compile(pattern3);
             Matcher matcher1;
             Matcher matcher2;
+            Matcher matcher3;
 
             InputStream is = context.getResources().getAssets().open(file);
             Workbook book = Workbook.getWorkbook(is);
@@ -30,7 +33,12 @@ public class ExcelUtil {
                 String classification = sheet.getName();
                 for (int j = 1; j < sheet.getRows(); ++j) { //忽略第一行
                     Recommendation recommendation = new Recommendation();
+                    //简化名称
                     String foodName = sheet.getCell(0, j).getContents();//从sheet中获取数据
+                    int commaIndex = foodName.indexOf("，");
+                    if(commaIndex!=-1){
+                        foodName = foodName.substring(0,commaIndex);
+                    }
                     String calorieStr = sheet.getCell(1, j).getContents();
                     double calorie = 0;
                     //提取卡路里值
@@ -42,10 +50,20 @@ public class ExcelUtil {
                             calorie = Double.parseDouble(matcher2.group(0));
                         }
                     }
+                    //remark（去掉评价两个字）
+                    String remark = sheet.getCell(2, j).getContents();
+                    if(remark=="评价：")
+                        remark = "暂无评价";
+                    else
+                        remark = remark.substring(0,remark.indexOf("："));
+                    //url
+                    String url = sheet.getCell(3,j).getContents();
 
                     recommendation.setClassification(classification);//设置分类
                     recommendation.setName(foodName);//设置食物名称
                     recommendation.setCalorie(calorie);//设置卡路里值
+                    recommendation.setRemark(remark);
+                    recommendation.setImgUrl(url);
                     recommendation.save();
                 }
             }

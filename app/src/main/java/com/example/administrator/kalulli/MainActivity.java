@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
         });
-//        TestUtil.test(this);//用于测试
+        TestUtil.test(this);//用于测试
 //        TestUtil.test2(this);
     }
 

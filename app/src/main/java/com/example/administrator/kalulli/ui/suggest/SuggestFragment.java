@@ -12,19 +12,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.avos.avoscloud.AVObject;
 import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.OnClickListener;
 import com.example.administrator.kalulli.litepal.Recommendation;
 import com.example.administrator.kalulli.ui.adapter.SuggestAdapter;
-import com.example.administrator.kalulli.utils.TableUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout;
 import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
 import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RapidFloatingActionContentLabelList;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +39,8 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SuggestFragment extends Fragment {
+public class SuggestFragment extends Fragment
+        implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener {
 
     public static int number = 0;
     public static Map<String,Integer>map = new HashMap();
@@ -53,8 +55,8 @@ public class SuggestFragment extends Fragment {
     RapidFloatingActionButton doFbtn;
     @BindView(R.id.do_fbtn_layout)
     RapidFloatingActionLayout doFbtnLayout;
-    @BindView(R.id.loading)
-    AVLoadingIndicatorView loading;
+//    @BindView(R.id.loading)
+//    AVLoadingIndicatorView loading;
     private int baseSize = 0;
 
     int selectPosition = 4;
@@ -64,7 +66,7 @@ public class SuggestFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            loading.hide();
+//            loading.hide();
 //            initRecyclerView();
         }
     };
@@ -76,7 +78,6 @@ public class SuggestFragment extends Fragment {
 
     private void initRecyclerView() {
         SuggestAdapter suggestAdapter = new SuggestAdapter(recommendations, getContext());
-        Log.i(TAG, "initRecyclerView: "+recommendations.size());
         suggestAdapter.setOnClickListener(new OnClickListener() {
             @Override
             public void click(int position, View view) {
@@ -112,8 +113,9 @@ public class SuggestFragment extends Fragment {
     }
 
     private void initFloating() {
-        loading.show();
+//        loading.show();
         RapidFloatingActionContentLabelList rfaContent = new RapidFloatingActionContentLabelList(getContext());
+        rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
         List<RFACLabelItem> items = new ArrayList<>();
         items.add(new RFACLabelItem<Integer>()
                 .setLabel("早餐推荐")
@@ -156,4 +158,32 @@ public class SuggestFragment extends Fragment {
         unbinder.unbind();
     }
 
+    //浮动按钮点击事件
+    @Override
+    public void onRFACItemLabelClick(int position, RFACLabelItem item) {
+    }
+
+    @Override
+    public void onRFACItemIconClick(int position, RFACLabelItem item) {
+        switch (position){
+            case 0:
+                recommendations = LitePal.where("name like ?","%")
+                        .find(Recommendation.class);
+                Log.d(TAG,String.valueOf(recommendations.size()));
+                SuggestAdapter adapter = new SuggestAdapter(recommendations,getContext());
+                suggestRecyclerView.setAdapter(adapter);
+                suggestRecyclerView.setLayoutManager(layoutManager);
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
+        rfabHelper.collapseContent();
+    }
+
+    //推荐算法
+    public void recommendationAlgorithm(){
+
+    }
 }
