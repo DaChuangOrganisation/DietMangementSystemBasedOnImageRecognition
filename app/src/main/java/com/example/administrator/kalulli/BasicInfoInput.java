@@ -2,17 +2,23 @@ package com.example.administrator.kalulli;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.BindView;
 import com.example.administrator.kalulli.base.BaseActivity;
 import com.example.administrator.kalulli.litepal.User;
+import com.example.administrator.kalulli.utils.ExcelUtil;
+import com.example.administrator.kalulli.utils.TestUtil;
 
 public class BasicInfoInput extends BaseActivity {
     boolean sexinput = false;
@@ -42,13 +48,13 @@ public class BasicInfoInput extends BaseActivity {
         rb = (RadioButton) BasicInfoInput.this.findViewById( radioGroupsex.getCheckedRadioButtonId());
         String choice = rb.getText().toString();
         int sex1;
-        if(choice.equals( "男" ))
+        if(choice.equals( "♂男" ))
         {sex1 = 1; sexinput = true;
-            Toast.makeText( BasicInfoInput.this, "已选择 男", Toast.LENGTH_LONG ).show();
+//            Toast.makeText( BasicInfoInput.this, "已选择 男", Toast.LENGTH_LONG ).show();
         }
-        else if(choice.equals( "女" ))
+        else if(choice.equals( "♀女" ))
         {sex1 = 2; sexinput = true;
-            Toast.makeText( BasicInfoInput.this, "已选择 女", Toast.LENGTH_LONG ).show();
+//            Toast.makeText( BasicInfoInput.this, "已选择 女", Toast.LENGTH_LONG ).show();
 
         }
         else {
@@ -62,7 +68,7 @@ public class BasicInfoInput extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         mContext = this;
-        Toast.makeText(BasicInfoInput.this,"oncreate()", Toast.LENGTH_LONG).show();
+//        Toast.makeText(BasicInfoInput.this,"oncreate()", Toast.LENGTH_LONG).show();
 
         radioGroupsex.setOnCheckedChangeListener( new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -74,10 +80,7 @@ public class BasicInfoInput extends BaseActivity {
         btnconfir.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-
                 saveuserinfo();
-
-
             }
         } );
     }
@@ -89,7 +92,6 @@ public class BasicInfoInput extends BaseActivity {
                 weight.getText().toString()!=null&&weight.getText().toString()!=""&&
                 sex!=null&&sex!=0
         ) {
-            Toast.makeText(BasicInfoInput.this,"基本信息已填写！", Toast.LENGTH_LONG).show();
             usernameStr = username.getText().toString();
             ageInt = Integer.parseInt( age.getText().toString() );
             heightInt = Integer.parseInt( height.getText().toString() );
@@ -111,12 +113,36 @@ public class BasicInfoInput extends BaseActivity {
             bl = true;
             boolStr = "true";
             SharePreUtil.put( mContext,"boolStr",boolStr );
-            Toast.makeText(BasicInfoInput.this,"boolStr==true！", Toast.LENGTH_LONG).show();
+//            Toast.makeText(BasicInfoInput.this,"boolStr==true！", Toast.LENGTH_LONG).show();
+//            ExcelUtil.importSheetToDB( this,"FoodCalorieData.xls" );
+            Toast.makeText(BasicInfoInput.this,"正在进入，请稍后...", Toast.LENGTH_LONG).show();
 
+            /*提示信息*/
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        Thread.sleep( 1000 );
+//                    } catch (InterruptedException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                        }
+//            }).start();
+            new Handler().postDelayed( new Runnable() {
+                @Override
+                public void run() {
+                }
+            }, 1000);
             Intent it = new Intent(  );
             it.setClass( BasicInfoInput.this,MainActivity.class );
             BasicInfoInput.this.startActivity( it );
-            mActivity.finish();
+
+            new Handler().postDelayed( new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            }, 1000);
         }
         else{
 
@@ -126,22 +152,17 @@ public class BasicInfoInput extends BaseActivity {
     }
     @Override
     protected void logicActivity(Bundle mSavedInstanceState) {
-//        if(SharePreUtil.get( mContext, "boolStr","")!=null&&SharePreUtil.get( mContext, "boolStr","").toString().equals( "true" )) {
-//            alreInput = SharePreUtil.get( mContext, "boolStr", "" ).toString();
-//            Toast.makeText( BasicInfoInpu.this, "Spalshactivity:boolStr= " + alreInput, Toast.LENGTH_LONG ).show();
-//        }
-//        else{
-//            Toast.makeText( BasicInfoInpu.this, "Spalshactivity:boolStr= " + alreInput, Toast.LENGTH_LONG ).show();
-//        }
-//        if(alreInput.equals( "true" )){
-//            Intent it = new Intent(  );
-//            it.setClass( BasicInfoInpu.this,MainActivity.class );
-//            BasicInfoInpu.this.startActivity( it );
-//            mActivity.finish();
-//        }
 
     }
-
+    private void showToast(String txt){
+        Toast tast=Toast.makeText(this, txt, Toast.LENGTH_LONG);
+        tast.setGravity( Gravity.CENTER, 0, 0);
+        View view= LayoutInflater.from(this).inflate(R.layout.custom_toast, null);
+        TextView tvMsg=(TextView)view.findViewById( R.id.tvMsg);
+        tvMsg.setText(txt);
+        tast.setView(view);
+        tast.show();
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.info_input;
@@ -150,5 +171,11 @@ public class BasicInfoInput extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TestUtil.test(this);//用于测试
     }
 }

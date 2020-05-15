@@ -9,16 +9,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:gravity="center"
-        android:background="@drawable/userbg">
+        android:background="#8ECCCCCC"
+        android:gravity="center">
 
 
         <ImageView
             android:id="@+id/imageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/imageButton2"
+            android:layout_alignParentStart="true"
             android:layout_marginStart="23dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/user" />
@@ -41,23 +41,21 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="11dp"
             android:layout_toEndOf="@+id/imageButton"
-            android:text="Asia"
-            android:textColor="#FF6600"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:text="欢迎！"
+            android:textColor="#070707"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/updateInfoTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/imageButton"
-            android:layout_marginStart="170dp"
-            android:layout_marginTop="11dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
             android:text="修改个人信息"
-            android:textColor="#FF6600"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textColor="#070707"
+            android:textSize="20sp" />
     </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/daily_recyclerView"
         android:layout_marginLeft="10dp"

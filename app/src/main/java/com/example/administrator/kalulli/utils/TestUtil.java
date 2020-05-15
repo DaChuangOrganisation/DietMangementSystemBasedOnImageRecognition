@@ -18,6 +18,6 @@ public class TestUtil {
 
 
         long endTime = System.currentTimeMillis();
-        Log.d(TAG,String.format("加载数据运行时间:%f s",(endTime-startTime)/1000.0));
+        Log.e(TAG,String.format("加载数据运行时间:%f s",(endTime-startTime)/1000.0));
     }
 }

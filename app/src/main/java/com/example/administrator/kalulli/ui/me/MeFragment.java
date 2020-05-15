@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,12 +23,15 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
-import com.example.administrator.kalulli.BasicInfoInpu;
+import com.example.administrator.kalulli.BasicInfoInput;
 import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.OnClickListener;
+import com.example.administrator.kalulli.litepal.User;
 import com.example.administrator.kalulli.ui.adapter.DailyAdapter;
 import com.example.administrator.kalulli.ui.suggest.ShowFoodActivity;
 import com.example.administrator.kalulli.utils.TableUtil;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +44,12 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
+
+
 public class MeFragment extends Fragment {
 
-
+    @BindView( R.id.textView )
+    TextView username;
     private static final String TAG = "MeFragment";
     @BindView(R.id.imageButton)
     ImageView imageButton;
@@ -54,7 +61,7 @@ public class MeFragment extends Fragment {
     RecyclerView dailyRecyclerView;
     Unbinder unbinder;
     private List<AVObject>meList = new ArrayList<>();
-
+    String usernameStr;
     public MeFragment() {
         // Required empty public constructor
     }
@@ -74,6 +81,8 @@ public class MeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         unbinder = ButterKnife.bind(this, view);
         textView.setOnClickListener(new View.OnClickListener() {
@@ -83,11 +92,19 @@ public class MeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        User user= LitePal.findFirst(User.class);
+        usernameStr = user.getName();
+        if(usernameStr!=null&&!usernameStr.equals( "" ))
+            username.setText( usernameStr );
         return view;
     }
 
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
 
+    }
 
     public void initRecyclerView(){
         DailyAdapter dailyAdapter = new DailyAdapter(meList, getContext());

@@ -43,7 +43,9 @@
         <activity android:name=".ui.suggest.ShowFoodActivity" />
         <activity android:name=".ui.me.ChangeInfoActivity" />
         <activity android:name=".ui.daily.DailyWeightActivity" />
+        <activity android:name=".ui.me.UpdateInfo"/>
         <activity android:name=".ui.suggest.SuggestDailyActivity">
+
         </activity>
 
         <meta-data

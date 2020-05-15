@@ -21,6 +21,7 @@ import com.example.administrator.kalulli.ui.suggest.SuggestFragment;
 import com.example.administrator.kalulli.utils.ActivityUtils;
 import com.example.administrator.kalulli.utils.BottomNavigationViewHelper;
 import com.example.administrator.kalulli.litepal.NutritionUtil;
+import com.example.administrator.kalulli.utils.TestUtil;
 
 import org.litepal.LitePal;
 
@@ -80,7 +81,6 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
         });
-
     }
 
     @Override
