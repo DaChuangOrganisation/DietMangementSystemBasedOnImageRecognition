@@ -21,6 +21,8 @@ import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.utils.SampleUtil;
 import com.example.administrator.kalulli.utils.SaveBitmap;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -87,10 +89,20 @@ public class CameraFragment extends Fragment {
                         options.put("filter_threshold", "0.7");
                         options.put("baike_num", "1");
                         str = SaveBitmap.saveImageToGallery(getActivity(),bitmap);
-                        JSONObject res = SampleUtil.client.dishDetect(str, options);
-                        Log.i(TAG, "run: "+res.toString());
-                        //Log.i(TAG, "run: "+res.toString());
-                        jsonObject = res;
+                        //API识别获得数据
+//                        JSONObject res = SampleUtil.client.dishDetect(str, options);
+//                        Log.i(TAG, "run: "+res.toString());
+//                        //Log.i(TAG, "run: "+res.toString());
+//                        jsonObject = res;
+
+                        //以下手动获得数据便于测试
+                        try {
+                            jsonObject = getJsonObject();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //以上手动获得数据便于测试
+
                         Message message = Message.obtain();
                         message.what = 1;
                         handler.sendMessage(message);
@@ -131,6 +143,30 @@ public class CameraFragment extends Fragment {
 
 
 
+    }
+
+    //创建json用于测试
+    private JSONObject getJsonObject() throws JSONException {
+        JSONObject baike=new JSONObject();
+        baike.put("baike_url", "http://baike.baidu.com/item/%E9%85%B8%E6%B1%A4%E9%B1%BC/1754055");
+        baike.put("description", "酸汤鱼，是黔桂湘交界地区的一道侗族名菜");
+
+        JSONObject result=new JSONObject();
+        result.put("calorie", "200");
+        result.put("has_calorie", 1);
+        result.put("name", "酸菜鱼");
+        result.put("baike_info", baike);
+
+        JSONArray result2=new JSONArray();
+        result2.put(result);
+
+
+        JSONObject ob1=new JSONObject();
+        ob1.put("result_num", 1);
+        ob1.put("log_id", 12456);
+        ob1.put("result", result2);
+
+        return ob1;
     }
 
     @Override
