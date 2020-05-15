@@ -98,7 +98,7 @@ public class DailyWeightActivity extends BaseActivity {
         // 获取最近15天的数据
         long todayMillis = TimeUtil.todayToMillis();
         long upper = todayMillis + DateUtils.DAY_IN_MILLIS;
-        long floor = todayMillis - 15 * DateUtils.DAY_IN_MILLIS;
+        long floor = todayMillis - 14 * DateUtils.DAY_IN_MILLIS;
         List<DailyCalorie> dailyCalories = LitePal
                 .where("date>=? and date<?", String.valueOf(floor), String.valueOf(upper))
                 .order("date")
