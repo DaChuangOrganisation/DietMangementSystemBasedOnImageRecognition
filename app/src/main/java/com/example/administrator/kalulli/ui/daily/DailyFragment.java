@@ -174,10 +174,10 @@ public class DailyFragment extends Fragment {
                     if(dc.getDate().getHours()<12){
                         breakfastSum+=dc.getTotalIntake();
                     }
-                    if(dc.getDate().getHours()>12 && dc.getDate().getHours()<18){
+                    if(dc.getDate().getHours()>=12 && dc.getDate().getHours()<18){
                         lunchSum+=dc.getTotalIntake();
                     }
-                    if(dc.getDate().getHours()>18){
+                    if(dc.getDate().getHours()>=18){
                         dinnerSum+=dc.getTotalIntake();
                     }
                 }
@@ -229,7 +229,7 @@ public class DailyFragment extends Fragment {
         List<FoodItem> bf=new ArrayList<>();
         for (DailyCalorie dc:
                 dcList) {
-            if(dc.getDate().getHours()>12 && dc.getDate().getHours()<18){
+            if(dc.getDate().getHours()>=12 && dc.getDate().getHours()<18){
                 if(dc.getItemList().size()!=0){
                     bf.add(dc.getItemList().get(0));
                 }
@@ -250,7 +250,7 @@ public class DailyFragment extends Fragment {
         List<FoodItem> bf=new ArrayList<>();
         for (DailyCalorie dc:
                 dcList) {
-            if(dc.getDate().getHours()<18){
+            if(dc.getDate().getHours()>=18){
                 if(dc.getItemList().size()!=0){
                     bf.add(dc.getItemList().get(0));
                 }
