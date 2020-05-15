@@ -12,12 +12,18 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.administrator.kalulli.base.BaseActivity;
+import com.example.administrator.kalulli.litepal.User;
 import com.example.administrator.kalulli.ui.camera.StartCameraFragment;
 import com.example.administrator.kalulli.ui.daily.DailyFragment;
+import com.example.administrator.kalulli.ui.me.MeFragment;
 import com.example.administrator.kalulli.ui.suggest.SuggestFragment;
 import com.example.administrator.kalulli.utils.ActivityUtils;
 import com.example.administrator.kalulli.utils.BottomNavigationViewHelper;
 import com.example.administrator.kalulli.utils.TestUtil;
+
+import org.litepal.LitePal;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -32,10 +38,19 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void logicActivity(Bundle mSavedInstanceState) {
         SharePreUtil.put( mContext,"boolStr","true" );
+        //findAll()返回值是一个Person类型的List集合
+        List<User> user=LitePal.findAll( User.class );
 
+        for(User user1:user)
+        {
+            Log.e("MainActivity","id: "+user1.getId()+"姓名： "+user1.getName()+"体重： "+user1.getWeight()+"性别： "+user1.getGender());
+        }
         if (mSavedInstanceState==null){
             ActivityUtils.replaceFragmentToActivity(mFragmentManager, StartCameraFragment.getInstance(),R.id.content_main);
         }
+//        if (mAVUserFinal == null){
+//            toast("请先登录",0);
+//        }
         int checkpermission = ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if (checkpermission != PackageManager.PERMISSION_GRANTED) {//没有给权限
@@ -57,14 +72,15 @@ public class MainActivity extends BaseActivity {
                     case R.id.daily_item:
                         ActivityUtils.replaceFragmentToActivity(mFragmentManager, DailyFragment.getInstance(),R.id.content_main);
                         break;
-//                    case R.id.me_item:
-//                        ActivityUtils.replaceFragmentToActivity(mFragmentManager, MeFragment.getInstance(),R.id.content_main);
-//                        break;
+                    case R.id.me_item:
+                        ActivityUtils.replaceFragmentToActivity(mFragmentManager, MeFragment.getInstance(),R.id.content_main);
+                        break;
                 }
                 return true;
             }
         });
 //        TestUtil.test(this);//用于测试
+        TestUtil.test2(this);
     }
 
     @Override

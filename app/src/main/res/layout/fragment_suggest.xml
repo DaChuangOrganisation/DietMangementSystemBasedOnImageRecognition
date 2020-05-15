@@ -53,13 +53,13 @@
             rfab:rfab_shadow_dy="0dp"
             />
     </com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout>
-    <com.wang.avi.AVLoadingIndicatorView
+<!--    <com.wang.avi.AVLoadingIndicatorView-->
 
-        android:layout_centerInParent="true"
-        android:id="@+id/loading"
-        app:indicatorColor="@color/google_blue"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:indicatorName="PacmanIndicator"
-        />
+<!--        android:layout_centerInParent="true"-->
+<!--        android:id="@+id/loading"-->
+<!--        app:indicatorColor="@color/google_blue"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        app:indicatorName="PacmanIndicator"-->
+<!--        />-->
 </RelativeLayout>

@@ -82,7 +82,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:background="#ffff">
+            android:background="#ffff"
+            android:id="@+id/Breakfast_btn">
 
             <TextView
                 android:id="@+id/textView9"
@@ -112,7 +113,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:background="#ffff">
+            android:background="#ffff"
+            android:id="@+id/Lunch_btn">
 
             <TextView
                 android:id="@+id/textView10"
@@ -141,7 +143,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:background="#ffff">
+            android:background="#ffff"
+            android:id="@+id/Dinner_btn">
 
             <TextView
                 android:id="@+id/textView11"

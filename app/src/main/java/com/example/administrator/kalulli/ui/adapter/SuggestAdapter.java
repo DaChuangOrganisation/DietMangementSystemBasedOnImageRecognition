@@ -13,6 +13,7 @@ import com.avos.avoscloud.AVObject;
 import com.bumptech.glide.Glide;
 import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.OnClickListener;
+import com.example.administrator.kalulli.litepal.Recommendation;
 import com.example.administrator.kalulli.utils.TableUtil;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
  */
 
 public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHolder> {
-    private List<AVObject> list = new ArrayList<>();
+    private List<Recommendation> list = new ArrayList<>();
     private Context context;
 
     private OnClickListener onClickListener;
@@ -35,7 +36,7 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
         this.onClickListener = onClickListener;
     }
 
-    public SuggestAdapter(List<AVObject> list, Context context) {
+    public SuggestAdapter(List<Recommendation> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -49,17 +50,17 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        AVObject avObject = list.get(position);
-        String foodName = avObject.get(TableUtil.FOOD_NAME).toString();
-        String imgUrl = avObject.get(TableUtil.FOOD_URL).toString();
-        String foodType = avObject.get(TableUtil.FOOD_TYPE).toString();
-        String foodInfo = avObject.get(TableUtil.FOOD_DESCRIPTION).toString();
+        Recommendation recommendation = list.get(position);
+        String foodName = recommendation.getName();
+        String imgUrl = recommendation.getImgUrl();
+        String foodType = recommendation.getClassification();
+        String foodInfo = recommendation.getRemark();
         holder.foodInfoItem.setText(foodInfo);
         holder.foodNameItem.setText(foodName);
         holder.foodTypeItem.setText("#"+foodType);
         Glide.with(context)
                 .load(imgUrl)
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.loading)
                 .into(holder.foodImgItem);
         if (onClickListener!= null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -69,9 +70,6 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
                 }
             });
         }
-
-
-
     }
 
     @Override

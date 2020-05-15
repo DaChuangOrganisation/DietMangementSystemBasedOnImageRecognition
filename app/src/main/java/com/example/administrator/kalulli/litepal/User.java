@@ -17,17 +17,39 @@ public class User extends LitePalSupport implements DataManipulation {
     private int age;// 年龄
     private double height;// cm单位制
     private double calorie;// 该用户每日建议卡路里摄入量
+    private double BMI;
+    private String figure;//体质
+
 
     public User() {
     }
 
-    public User(String name, double weight, String gender, int age, double height, double calorie) {
+    public User(String name, double weight, String gender,
+                int age, double height, double calorie, double BMI, String figure) {
         this.name = name;
         this.weight = weight;
         this.gender = gender;
         this.age = age;
         this.height = height;
         this.calorie = calorie;
+        this.BMI = BMI;
+        this.figure = figure;
+    }
+
+    public double getBMI() {
+        return BMI;
+    }
+
+    public void setBMI(double BMI) {
+        this.BMI = BMI;
+    }
+
+    public String getFigure() {
+        return figure;
+    }
+
+    public void setFigure(String figure) {
+        this.figure = figure;
     }
 
     public double getWeight() {

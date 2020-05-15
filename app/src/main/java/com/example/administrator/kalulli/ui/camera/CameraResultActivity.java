@@ -34,6 +34,7 @@ import org.litepal.LitePal;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +66,7 @@ public class CameraResultActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         try {
             // 断言bundle不为空，如果为bundle为空则抛出异常
-            assert bundle != null;
+            //assert bundle != null;
             Log.i(TAG, "logicActivity: " + bundle.getString("json"));
             JSONObject object = new JSONObject(bundle.getString("json"));
             Log.i(TAG, "logicActivity: " + object.toString());
@@ -75,19 +76,20 @@ public class CameraResultActivity extends BaseActivity {
 
             // 根据返回的结果，判断图片中是否含有卡路里。
             // 如果没有卡路里则用Toast提示用户，并返回。
-            if (object1.has("has_calorie") && !object1.getBoolean("has_calorie")) {
-                Toast.makeText(this, "该图片中没有卡路里", Toast.LENGTH_LONG).show();
-                return;
-            }
+//            if (object1.has("has_calorie") && !object1.getBoolean("has_calorie")) {
+//                Toast.makeText(this, "该图片中没有卡路里", Toast.LENGTH_LONG).show();
+//                return;
+//            }
 
-            String object2 = object1.getString("baike_info");
-            Log.i(TAG, "getData: " + object2);
-            String[] strings = object2.split("\"");
-            Log.i(TAG, "logicActivity: " + strings.length);
-            if (strings.length > 5) {
-                description = strings[11];
-            }
-
+            //似乎description有问题
+//            String object2 = object1.getString("baike_info");
+//            Log.i(TAG, "getData: " + object2);
+//            String[] strings = object2.split("\"");
+//            Log.i(TAG, "logicActivity: " + strings.length);
+//            if (strings.length > 5) {
+//                description = strings[11];
+//            }
+            description="nice";
             FoodJson foodJson = new FoodJson(object1.getString("name"),
                     object1.getString("calorie"),
                     bundle.getString("str"),
@@ -115,140 +117,165 @@ public class CameraResultActivity extends BaseActivity {
     }
 
     @OnClick(R.id.button)
-    public void onViewClicked() {
+    public void onViewClicked(){
         loadingPut.show();
-        if (mAVUserFinal != null) {
-            Log.i(TAG, "onViewClicked: click");
-            //AVObject avObject = new AVObject(TableUtil.DAILY_FOOD_TABLE_NAME);
-            Log.i(TAG, "onViewClicked: " + list.get(0).getPicture_url());
-            try {
-                final AVFile file = AVFile.withAbsoluteLocalPath(list.get(0).getFoodname(), list.get(0).getPicture_url());
-                file.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(AVException e) {
-                        if (e == null) {
-                            final AVObject avObject = new AVObject(TableUtil.DAILY_FOOD_TABLE_NAME);
-                            FoodJson foodJson = list.get(0);
-                            String foodName = foodJson.getFoodname();
-                            String imgUrl = file.getUrl();
-                            String type = ComputerTypeUtil.getType();
-                            final String calorie = foodJson.getNumber();
-                            String info = foodJson.getDescription();
-                            avObject.put(TableUtil.DAILY_FOOD_USER, mAVUserFinal);
-                            avObject.put(TableUtil.DAILY_FOOD_URL, imgUrl);
-                            if (type.equals("早餐")) {
-                                avObject.put(TableUtil.DAILY_FOOD_CALORIE, Integer.parseInt(calorie) * 2 + "");
-                            } else if (type.equals("午餐")) {
-                                avObject.put(TableUtil.DAILY_FOOD_CALORIE, Integer.parseInt(calorie) * 3.5 + "");
-                            } else {
-                                avObject.put(TableUtil.DAILY_FOOD_CALORIE, Integer.parseInt(calorie) * 3 + "");
-                            }
-                            avObject.put(TableUtil.DAILY_FOOD_DESCRIPTION, info);
-                            avObject.put(TableUtil.DAILY_FOOD_TIME, TimeUtil.getRealDate());
-                            avObject.put(TableUtil.DAILY_FOOD_NAME, foodName);
-                            avObject.put(TableUtil.DAILY_FOOD_TYPE, type);
-                            avObject.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(AVException e) {
-                                    if (e == null) {
+        Log.i(TAG, "onViewClicked: click");
+        try{
+            FoodJson tFoodJson=list.get(0);
+            Date date=new Date();
+            FoodItem item1=new FoodItem(tFoodJson.getFoodname(),Double.parseDouble(tFoodJson.getNumber()),date,tFoodJson.getPicture_url());
+            DailyCalorie dc1 = new DailyCalorie();
+            item1.saveOrUpdateData();
+            dc1.getItemList().add(item1);
+            item1.setDailyCalorie(dc1);
+            dc1.setDate(new Date());
+            dc1.setTotalIntake(dc1.getTotalIntake()+item1.getCalorie());
+            dc1.saveOrUpdateData();
+            loadingPut.hide();
+            toast("提交成功", 0);
+            Log.i(TAG, "onViewClicked: click "+ dc1.getDate());
 
-                                        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_TABLE_NAME);
-                                        query.whereEqualTo(TableUtil.DAILY_DATE, TimeUtil.getDate());
-                                        query.whereEqualTo(TableUtil.DAILY_USER, mAVUserFinal);
-                                        // 如果这样写，第二个条件将覆盖第一个条件，查询只会返回 priority = 1 的结果
-                                        query.findInBackground(new FindCallback<AVObject>() {
-                                            @Override
-                                            public void done(List<AVObject> list, AVException e) {
-                                                if (e == null) {
-                                                    if (list == null || list.size() == 0) {
-                                                        AVObject avObject1 = new AVObject(TableUtil.DAILY_TABLE_NAME);
-                                                        if (ComputerTypeUtil.getType().equals("早餐")) {
-                                                            avObject1.put(TableUtil.DAILY_MORNING, Integer.parseInt(calorie) * 2 + "");
-
-                                                        } else if (ComputerTypeUtil.getType().equals("午餐")) {
-                                                            avObject1.put(TableUtil.DAILY_AFTERNOON, Integer.parseInt(calorie) * 3.5 + "");
-
-                                                        } else {
-                                                            avObject1.put(TableUtil.DAILY_EVENING, Integer.parseInt(calorie) * 3 + "");
-                                                        }
-                                                        avObject1.put(TableUtil.DAILY_USER, mAVUserFinal);
-                                                        avObject1.put(TableUtil.DAILY_DATE, TimeUtil.getDate());
-                                                        avObject1.saveInBackground(new SaveCallback() {
-                                                            @Override
-                                                            public void done(AVException e) {
-                                                                if (e == null) {
-                                                                    Log.i(TAG, "done: daily 提交成功");
-                                                                } else {
-                                                                    Log.e(TAG, "done: " + e.getMessage());
-                                                                }
-                                                            }
-                                                        });
-                                                    } else {
-                                                        AVObject avObject2 = list.get(0);
-                                                        if (ComputerTypeUtil.getType().equals("早餐")) {
-                                                            if (avObject2.get(TableUtil.DAILY_MORNING) == null
-                                                                    || avObject2.get(TableUtil.DAILY_MORNING).equals("")) {
-                                                                avObject2.put(TableUtil.DAILY_MORNING, Integer.parseInt(calorie) * 2 + "");
-                                                            } else {
-                                                                double calorie2 = Double.parseDouble(avObject2.getString(TableUtil.DAILY_MORNING));
-                                                                avObject2.put(TableUtil.DAILY_MORNING, calorie2 + Integer.parseInt(calorie) * 2 + "");
-                                                            }
-
-                                                        } else if (ComputerTypeUtil.getType().equals("午餐")) {
-                                                            if (avObject2.get(TableUtil.DAILY_AFTERNOON) == null
-                                                                    || avObject2.get(TableUtil.DAILY_AFTERNOON).equals("")) {
-                                                                avObject2.put(TableUtil.DAILY_AFTERNOON, Integer.parseInt(calorie) * 3.5 + "");
-                                                            } else {
-                                                                double calorie2 = Double.parseDouble(avObject2.getString(TableUtil.DAILY_AFTERNOON));
-                                                                avObject2.put(TableUtil.DAILY_AFTERNOON, calorie2 + Integer.parseInt(calorie) * 3.5 + "");
-                                                            }
-
-                                                        } else {
-                                                            if (avObject2.get(TableUtil.DAILY_EVENING) == null
-                                                                    || avObject2.get(TableUtil.DAILY_EVENING).equals("")) {
-                                                                avObject2.put(TableUtil.DAILY_EVENING, Integer.parseInt(calorie) * 3 + "");
-                                                            } else {
-                                                                double calorie2 = Double.parseDouble(avObject2.getString(TableUtil.DAILY_EVENING));
-                                                                avObject2.put(TableUtil.DAILY_EVENING, calorie2 + Integer.parseInt(calorie) * 3 + "");
-                                                            }
-                                                        }
-                                                        avObject2.saveInBackground(new SaveCallback() {
-                                                            @Override
-                                                            public void done(AVException e) {
-                                                                if (e == null) {
-                                                                    Log.i(TAG, "done: daily 修改成功");
-                                                                } else {
-                                                                    Log.e(TAG, "done: " + e.getMessage());
-                                                                }
-                                                            }
-                                                        });
-
-                                                    }
-                                                    loadingPut.hide();
-                                                    toast("提交成功", 0);
-                                                    mActivity.finish();
-                                                } else {
-                                                    Log.e(TAG, "done: " + e.getMessage());
-                                                }
-                                            }
-
-                                        });
-                                    } else {
-                                        Log.e(TAG, "done: " + e.getMessage());
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
-            toast("请先登录", 0);
         }
-
-
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
+//    @OnClick(R.id.button)
+//    public void onViewClicked() {
+//        loadingPut.show();
+//        if (mAVUserFinal != null) {
+//            Log.i(TAG, "onViewClicked: click");
+//            //AVObject avObject = new AVObject(TableUtil.DAILY_FOOD_TABLE_NAME);
+//            Log.i(TAG, "onViewClicked: " + list.get(0).getPicture_url());
+//            try {
+//                final AVFile file = AVFile.withAbsoluteLocalPath(list.get(0).getFoodname(), list.get(0).getPicture_url());
+//                file.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(AVException e) {
+//                        if (e == null) {
+//                            final AVObject avObject = new AVObject(TableUtil.DAILY_FOOD_TABLE_NAME);
+//                            FoodJson foodJson = list.get(0);
+//                            String foodName = foodJson.getFoodname();
+//                            String imgUrl = file.getUrl();
+//                            String type = ComputerTypeUtil.getType();
+//                            final String calorie = foodJson.getNumber();
+//                            String info = foodJson.getDescription();
+//                            avObject.put(TableUtil.DAILY_FOOD_USER, mAVUserFinal);
+//                            avObject.put(TableUtil.DAILY_FOOD_URL, imgUrl);
+//                            if (type.equals("早餐")) {
+//                                avObject.put(TableUtil.DAILY_FOOD_CALORIE, Integer.parseInt(calorie) * 2 + "");
+//                            } else if (type.equals("午餐")) {
+//                                avObject.put(TableUtil.DAILY_FOOD_CALORIE, Integer.parseInt(calorie) * 3.5 + "");
+//                            } else {
+//                                avObject.put(TableUtil.DAILY_FOOD_CALORIE, Integer.parseInt(calorie) * 3 + "");
+//                            }
+//                            avObject.put(TableUtil.DAILY_FOOD_DESCRIPTION, info);
+//                            avObject.put(TableUtil.DAILY_FOOD_TIME, TimeUtil.getRealDate());
+//                            avObject.put(TableUtil.DAILY_FOOD_NAME, foodName);
+//                            avObject.put(TableUtil.DAILY_FOOD_TYPE, type);
+//                            avObject.saveInBackground(new SaveCallback() {
+//                                @Override
+//                                public void done(AVException e) {
+//                                    if (e == null) {
+//
+//                                        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_TABLE_NAME);
+//                                        query.whereEqualTo(TableUtil.DAILY_DATE, TimeUtil.getDate());
+//                                        query.whereEqualTo(TableUtil.DAILY_USER, mAVUserFinal);
+//                                        // 如果这样写，第二个条件将覆盖第一个条件，查询只会返回 priority = 1 的结果
+//                                        query.findInBackground(new FindCallback<AVObject>() {
+//                                            @Override
+//                                            public void done(List<AVObject> list, AVException e) {
+//                                                if (e == null) {
+//                                                    if (list == null || list.size() == 0) {
+//                                                        AVObject avObject1 = new AVObject(TableUtil.DAILY_TABLE_NAME);
+//                                                        if (ComputerTypeUtil.getType().equals("早餐")) {
+//                                                            avObject1.put(TableUtil.DAILY_MORNING, Integer.parseInt(calorie) * 2 + "");
+//
+//                                                        } else if (ComputerTypeUtil.getType().equals("午餐")) {
+//                                                            avObject1.put(TableUtil.DAILY_AFTERNOON, Integer.parseInt(calorie) * 3.5 + "");
+//
+//                                                        } else {
+//                                                            avObject1.put(TableUtil.DAILY_EVENING, Integer.parseInt(calorie) * 3 + "");
+//                                                        }
+//                                                        avObject1.put(TableUtil.DAILY_USER, mAVUserFinal);
+//                                                        avObject1.put(TableUtil.DAILY_DATE, TimeUtil.getDate());
+//                                                        avObject1.saveInBackground(new SaveCallback() {
+//                                                            @Override
+//                                                            public void done(AVException e) {
+//                                                                if (e == null) {
+//                                                                    Log.i(TAG, "done: daily 提交成功");
+//                                                                } else {
+//                                                                    Log.e(TAG, "done: " + e.getMessage());
+//                                                                }
+//                                                            }
+//                                                        });
+//                                                    } else {
+//                                                        AVObject avObject2 = list.get(0);
+//                                                        if (ComputerTypeUtil.getType().equals("早餐")) {
+//                                                            if (avObject2.get(TableUtil.DAILY_MORNING) == null
+//                                                                    || avObject2.get(TableUtil.DAILY_MORNING).equals("")) {
+//                                                                avObject2.put(TableUtil.DAILY_MORNING, Integer.parseInt(calorie) * 2 + "");
+//                                                            } else {
+//                                                                double calorie2 = Double.parseDouble(avObject2.getString(TableUtil.DAILY_MORNING));
+//                                                                avObject2.put(TableUtil.DAILY_MORNING, calorie2 + Integer.parseInt(calorie) * 2 + "");
+//                                                            }
+//
+//                                                        } else if (ComputerTypeUtil.getType().equals("午餐")) {
+//                                                            if (avObject2.get(TableUtil.DAILY_AFTERNOON) == null
+//                                                                    || avObject2.get(TableUtil.DAILY_AFTERNOON).equals("")) {
+//                                                                avObject2.put(TableUtil.DAILY_AFTERNOON, Integer.parseInt(calorie) * 3.5 + "");
+//                                                            } else {
+//                                                                double calorie2 = Double.parseDouble(avObject2.getString(TableUtil.DAILY_AFTERNOON));
+//                                                                avObject2.put(TableUtil.DAILY_AFTERNOON, calorie2 + Integer.parseInt(calorie) * 3.5 + "");
+//                                                            }
+//
+//                                                        } else {
+//                                                            if (avObject2.get(TableUtil.DAILY_EVENING) == null
+//                                                                    || avObject2.get(TableUtil.DAILY_EVENING).equals("")) {
+//                                                                avObject2.put(TableUtil.DAILY_EVENING, Integer.parseInt(calorie) * 3 + "");
+//                                                            } else {
+//                                                                double calorie2 = Double.parseDouble(avObject2.getString(TableUtil.DAILY_EVENING));
+//                                                                avObject2.put(TableUtil.DAILY_EVENING, calorie2 + Integer.parseInt(calorie) * 3 + "");
+//                                                            }
+//                                                        }
+//                                                        avObject2.saveInBackground(new SaveCallback() {
+//                                                            @Override
+//                                                            public void done(AVException e) {
+//                                                                if (e == null) {
+//                                                                    Log.i(TAG, "done: daily 修改成功");
+//                                                                } else {
+//                                                                    Log.e(TAG, "done: " + e.getMessage());
+//                                                                }
+//                                                            }
+//                                                        });
+//
+//                                                    }
+//                                                    loadingPut.hide();
+//                                                    toast("提交成功", 0);
+//                                                    mActivity.finish();
+//                                                } else {
+//                                                    Log.e(TAG, "done: " + e.getMessage());
+//                                                }
+//                                            }
+//
+//                                        });
+//                                    } else {
+//                                        Log.e(TAG, "done: " + e.getMessage());
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    }
+//                });
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            toast("请先登录", 0);
+//        }
+//
+//
+//    }
 
 }
