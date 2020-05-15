@@ -8,10 +8,12 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
@@ -57,14 +59,17 @@ import butterknife.OnClick;
 public class DailyWeightActivity extends BaseActivity {
 
     private static final String TAG = "DailyWeightActivity";
-    @BindView(R.id.weight_et)
-    EditText weightEt;
-    @BindView(R.id.send_btn)
-    Button send_btn;
+    //    @BindView(R.id.weight_et)
+//    EditText weightEt;
+//    @BindView(R.id.send_btn)
+//    Button send_btn;
     @BindView(R.id.chart)
     LineChart chart;
     @BindView(R.id.back_daily_img)
     ImageView backDailyImg;
+    @BindView(R.id.tip_tv)
+    TextView tipTv;
+
     private List<Entry> entries = new ArrayList<>();
     private List<String> meList = new ArrayList<>();
     private LineDataSet dataSet;
@@ -93,7 +98,7 @@ public class DailyWeightActivity extends BaseActivity {
         // 获取最近15天的数据
         long todayMillis = TimeUtil.todayToMillis();
         long upper = todayMillis + DateUtils.DAY_IN_MILLIS;
-        long floor = todayMillis - 15 * DateUtils.DAY_IN_MILLIS;
+        long floor = todayMillis - 14 * DateUtils.DAY_IN_MILLIS;
         List<DailyCalorie> dailyCalories = LitePal
                 .where("date>=? and date<?", String.valueOf(floor), String.valueOf(upper))
                 .order("date")
@@ -107,6 +112,12 @@ public class DailyWeightActivity extends BaseActivity {
 //            dailyCalorie.setTotalIntake((15 - i) * 10);
 //            dailyCalories.add(dailyCalorie);
 //        }
+
+        if (dailyCalories.size() == 0) {
+            tipTv.setText("最近15天没有卡路里相关数据");
+            chart.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         // 以日期为key, 每日卡路里总量为value, 构建哈希表，目的是消除属于同一天的多个DailyCalorie
         HashMap<String, Double> hashMap = new HashMap<>();
@@ -125,12 +136,13 @@ public class DailyWeightActivity extends BaseActivity {
 
         Collections.sort(entries, new EntryXComparator());
 
-        Description description = new Description();
-        description.setText("时间");
-        description.setTextSize(15);
+//        Description description = new Description();
+//        description.setText("日期");
+//        description.setTextSize(15);
         chart.setNoDataText("当前还没有数据");
-        chart.setDescription(description);
+//        chart.setDescription(description);
         chart.setBorderColor(Color.CYAN);
+        chart.setDescription(null);
         chart.setDrawGridBackground(false);
         chart.setDrawBorders(false);
 //        chart.setTouchEnabled(true);
@@ -160,7 +172,7 @@ public class DailyWeightActivity extends BaseActivity {
         axisRight.setEnabled(false);
 
         //2
-        dataSet = new LineDataSet(entries, "体重曲线图");
+        dataSet = new LineDataSet(entries, "每日卡路里");
         dataSet.setCubicIntensity(0.2f);
         dataSet.setDrawFilled(true);
         dataSet.setDrawCircles(false);
@@ -189,70 +201,70 @@ public class DailyWeightActivity extends BaseActivity {
         return R.layout.activity_daily_weight;
     }
 
-    @OnClick(R.id.send_btn)
-    public void onClick() {
-        final String weight = weightEt.getText().toString().trim();
-        System.out.println("......................................................");
-        long time = System.currentTimeMillis();
-        dataSet.addEntry(new Entry(time, Float.parseFloat(weight)));
-        Log.i("time", simpleDateFormat.format(new Date(System.currentTimeMillis())));
-        chart.setData(new LineData(dataSet));
-//        chart.notifyDataSetChanged();
-        chart.invalidate();
-    }
+//    @OnClick(R.id.send_btn)
+//    public void onClick() {
+//        final String weight = weightEt.getText().toString().trim();
+//        System.out.println("......................................................");
+//        long time = System.currentTimeMillis();
+//        dataSet.addEntry(new Entry(time, Float.parseFloat(weight)));
+//        Log.i("time", simpleDateFormat.format(new Date(System.currentTimeMillis())));
+//        chart.setData(new LineData(dataSet));
+////        chart.notifyDataSetChanged();
+//        chart.invalidate();
+//    }
 
-    public void onViewClicked() {
-        final String weight = weightEt.getText().toString().trim();
-        final String date = TimeUtil.getDate().split("-")[2];
-        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_WEIGHT_TABLE_NAME);
-        query.whereEqualTo(TableUtil.DAILY_WEIGHT_USER, mAVUserFinal);
-        query.findInBackground(new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> avObjects, AVException avException) {
-                if (avException == null) {
-                    if (avObjects == null || avObjects.size() == 0) {
-                        AVObject avObject = new AVObject(TableUtil.DAILY_WEIGHT_TABLE_NAME);
-                        List<String> list = new ArrayList<>();
-                        list.add("00|" + mAVUserFinal.get(TableUtil.USER_WEIGHT));
-                        list.add(date + "|" + weight);
-                        avObject.put(TableUtil.DAILY_WEIGHT_ARRAY, list);
-                        avObject.put(TableUtil.DAILY_WEIGHT_USER, mAVUserFinal);
-                        avObject.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(AVException e) {
-                                if (e == null) {
-                                    toast("上传成功", 0);
-                                    getData();
-                                } else {
-                                    Log.e(TAG, "done: " + e.getMessage());
-                                }
-                            }
-                        });
-                    } else {
-                        AVObject avObject = avObjects.get(0);
-                        Log.i(TAG, "done: " + avObject.getObjectId());
-                        List<String> list = avObject.getList(TableUtil.DAILY_WEIGHT_ARRAY);
-                        list.add(date + "|" + weight);
-                        avObject.put(TableUtil.DAILY_WEIGHT_ARRAY, list);
-                        avObject.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(AVException e) {
-                                if (e == null) {
-                                    toast("上传成功", 0);
-                                    getData();
-                                } else {
-                                    Log.e(TAG, "done: " + e.getMessage());
-                                }
-                            }
-                        });
-
-                    }
-                } else {
-                    Log.e(TAG, "done: " + avException.getMessage());
-                }
-            }
-        });
-    }
+//    public void onViewClicked() {
+//        final String weight = weightEt.getText().toString().trim();
+//        final String date = TimeUtil.getDate().split("-")[2];
+//        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_WEIGHT_TABLE_NAME);
+//        query.whereEqualTo(TableUtil.DAILY_WEIGHT_USER, mAVUserFinal);
+//        query.findInBackground(new FindCallback<AVObject>() {
+//            @Override
+//            public void done(List<AVObject> avObjects, AVException avException) {
+//                if (avException == null) {
+//                    if (avObjects == null || avObjects.size() == 0) {
+//                        AVObject avObject = new AVObject(TableUtil.DAILY_WEIGHT_TABLE_NAME);
+//                        List<String> list = new ArrayList<>();
+//                        list.add("00|" + mAVUserFinal.get(TableUtil.USER_WEIGHT));
+//                        list.add(date + "|" + weight);
+//                        avObject.put(TableUtil.DAILY_WEIGHT_ARRAY, list);
+//                        avObject.put(TableUtil.DAILY_WEIGHT_USER, mAVUserFinal);
+//                        avObject.saveInBackground(new SaveCallback() {
+//                            @Override
+//                            public void done(AVException e) {
+//                                if (e == null) {
+//                                    toast("上传成功", 0);
+//                                    getData();
+//                                } else {
+//                                    Log.e(TAG, "done: " + e.getMessage());
+//                                }
+//                            }
+//                        });
+//                    } else {
+//                        AVObject avObject = avObjects.get(0);
+//                        Log.i(TAG, "done: " + avObject.getObjectId());
+//                        List<String> list = avObject.getList(TableUtil.DAILY_WEIGHT_ARRAY);
+//                        list.add(date + "|" + weight);
+//                        avObject.put(TableUtil.DAILY_WEIGHT_ARRAY, list);
+//                        avObject.saveInBackground(new SaveCallback() {
+//                            @Override
+//                            public void done(AVException e) {
+//                                if (e == null) {
+//                                    toast("上传成功", 0);
+//                                    getData();
+//                                } else {
+//                                    Log.e(TAG, "done: " + e.getMessage());
+//                                }
+//                            }
+//                        });
+//
+//                    }
+//                } else {
+//                    Log.e(TAG, "done: " + avException.getMessage());
+//                }
+//            }
+//        });
+//    }
 
     public void getData() {
 
