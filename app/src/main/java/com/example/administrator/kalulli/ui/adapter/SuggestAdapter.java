@@ -60,7 +60,7 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
         holder.foodTypeItem.setText("#"+foodType);
         Glide.with(context)
                 .load(imgUrl)
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.loading)
                 .into(holder.foodImgItem);
         if (onClickListener!= null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {

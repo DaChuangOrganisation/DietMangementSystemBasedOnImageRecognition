@@ -167,9 +167,9 @@ public class SuggestFragment extends Fragment
     public void onRFACItemIconClick(int position, RFACLabelItem item) {
         switch (position){
             case 0:
-                recommendations = LitePal.where("name like ?","%")
+                recommendations = LitePal.where("name = ?","菜心")
                         .find(Recommendation.class);
-                Log.d(TAG,String.valueOf(recommendations.size()));
+                Log.d(TAG,"推荐菜品个数：" + String.valueOf(recommendations.size()));
                 SuggestAdapter adapter = new SuggestAdapter(recommendations,getContext());
                 suggestRecyclerView.setAdapter(adapter);
                 suggestRecyclerView.setLayoutManager(layoutManager);

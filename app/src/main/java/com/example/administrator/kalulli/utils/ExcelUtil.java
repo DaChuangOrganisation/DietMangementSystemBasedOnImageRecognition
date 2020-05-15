@@ -21,17 +21,15 @@ public class ExcelUtil {
             String pattern3 = "";
             Pattern r1 = Pattern.compile(pattern1);
             Pattern r2 = Pattern.compile(pattern2);
-            Pattern r3 = Pattern.compile(pattern3);
             Matcher matcher1;
             Matcher matcher2;
-            Matcher matcher3;
 
             InputStream is = context.getResources().getAssets().open(file);
             Workbook book = Workbook.getWorkbook(is);
             for(int i =0; i<11; i++){
-                Sheet sheet = book.getSheet(0);
+                Sheet sheet = book.getSheet(i);
                 String classification = sheet.getName();
-                for (int j = 1; j < sheet.getRows(); ++j) { //忽略第一行
+                for (int j = 1; j < sheet.getRows(); ++j) { //j=1,忽略第一行
                     Recommendation recommendation = new Recommendation();
                     //简化名称
                     String foodName = sheet.getCell(0, j).getContents();//从sheet中获取数据
