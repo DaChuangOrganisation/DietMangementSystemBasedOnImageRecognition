@@ -16,10 +16,10 @@ public class SplashActivity extends BaseActivity {
         mActivity=this;
         if(SharePreUtil.get( mContext, "boolStr","")!=null&&SharePreUtil.get( mContext, "boolStr","").toString().equals( "true" )) {
             alreInput = SharePreUtil.get( mContext, "boolStr", "" ).toString();
-            Toast.makeText( SplashActivity.this, "Spalshactivity:boolStr= " + alreInput, Toast.LENGTH_LONG ).show();
+//            Toast.makeText( SplashActivity.this, "Spalshactivity:boolStr= " + alreInput, Toast.LENGTH_LONG ).show();
         }
         else{
-            Toast.makeText( SplashActivity.this, "Spalshactivity:boolStr= " + alreInput, Toast.LENGTH_LONG ).show();
+//            Toast.makeText( SplashActivity.this, "Spalshactivity:boolStr= " + alreInput, Toast.LENGTH_LONG ).show();
         }
         new Thread(new Runnable() {
             @Override

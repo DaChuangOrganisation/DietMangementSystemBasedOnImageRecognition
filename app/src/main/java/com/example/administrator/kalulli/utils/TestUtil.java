@@ -18,7 +18,7 @@ public class TestUtil {
 
 
         long endTime = System.currentTimeMillis();
-        Log.d(TAG,String.format("加载数据运行时间:%f s",(endTime-startTime)/1000.0));
+        Log.e(TAG,String.format("加载数据运行时间:%f s",(endTime-startTime)/1000.0));
     }
     public static void test2(Activity context){
        List<Recommendation> recommendations = LitePal.where("name=?","油条，又叫小油条").find(Recommendation.class);

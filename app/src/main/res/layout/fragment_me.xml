@@ -8,29 +8,30 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="210dp"
-        android:background="@drawable/menew">
+        android:layout_height="180dp"
+        android:background="#8ECCCCCC"
+        android:gravity="center">
 
 
         <ImageView
             android:id="@+id/imageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/imageButton2"
+            android:layout_alignParentStart="true"
             android:layout_marginStart="23dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/login" />
+            android:src="@drawable/user" />
 
         <ImageView
             android:id="@+id/imageButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_width="65dp"
+            android:layout_height="63dp"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="20dp"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="11dp"
-            android:src="@drawable/ic_apps_black_24dp" />
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/closeapp" />
 
         <TextView
             android:id="@+id/textView"
@@ -40,11 +41,21 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="11dp"
             android:layout_toEndOf="@+id/imageButton"
-            android:text="Asia"
-            android:textColor="@android:color/background_light"
-            android:textSize="20sp"
-             />
+            android:text="欢迎！"
+            android:textColor="#070707"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/updateInfoTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:text="修改个人信息"
+            android:textColor="#070707"
+            android:textSize="20sp" />
     </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/daily_recyclerView"
         android:layout_marginLeft="10dp"
