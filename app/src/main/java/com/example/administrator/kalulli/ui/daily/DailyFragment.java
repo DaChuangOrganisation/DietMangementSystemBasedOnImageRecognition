@@ -1,6 +1,7 @@
 package com.example.administrator.kalulli.ui.daily;
 
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -138,15 +139,15 @@ public class DailyFragment extends Fragment {
     }
 
     private void getData() {
-
         // 用户今日还需摄入的卡路里
         double dailyNeedCalorie = getKC();
         double finalNeedCalorie = getTodayCalorie() - dailyNeedCalorie;
-        dailyNeedTv.setText(String.format("每日应当摄入 %.2f 千卡", dailyNeedCalorie));
+
+        dailyNeedTv.setText(String.format("每日应当摄入 %.0f", dailyNeedCalorie));
         if (finalNeedCalorie > 0) {
-            dailyMoreTv.setText(String.format("今日还需摄入 %s 千卡", finalNeedCalorie));
+            dailyMoreTv.setText(String.format("今日还需摄入 %s", finalNeedCalorie));
         } else {
-            dailyMoreTv.setText("今日还需摄入 0 千卡");
+            dailyMoreTv.setText("今日还需摄入 0");
         }
 
 //        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_TABLE_NAME);

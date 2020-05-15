@@ -57,10 +57,10 @@ import butterknife.OnClick;
 public class DailyWeightActivity extends BaseActivity {
 
     private static final String TAG = "DailyWeightActivity";
-    @BindView(R.id.weight_et)
-    EditText weightEt;
-    @BindView(R.id.send_btn)
-    Button send_btn;
+//    @BindView(R.id.weight_et)
+//    EditText weightEt;
+//    @BindView(R.id.send_btn)
+//    Button send_btn;
     @BindView(R.id.chart)
     LineChart chart;
     @BindView(R.id.back_daily_img)
@@ -125,12 +125,13 @@ public class DailyWeightActivity extends BaseActivity {
 
         Collections.sort(entries, new EntryXComparator());
 
-        Description description = new Description();
-        description.setText("时间");
-        description.setTextSize(15);
+//        Description description = new Description();
+//        description.setText("日期");
+//        description.setTextSize(15);
         chart.setNoDataText("当前还没有数据");
-        chart.setDescription(description);
+//        chart.setDescription(description);
         chart.setBorderColor(Color.CYAN);
+        chart.setDescription(null);
         chart.setDrawGridBackground(false);
         chart.setDrawBorders(false);
 //        chart.setTouchEnabled(true);
@@ -160,7 +161,7 @@ public class DailyWeightActivity extends BaseActivity {
         axisRight.setEnabled(false);
 
         //2
-        dataSet = new LineDataSet(entries, "体重曲线图");
+        dataSet = new LineDataSet(entries, "每日卡路里");
         dataSet.setCubicIntensity(0.2f);
         dataSet.setDrawFilled(true);
         dataSet.setDrawCircles(false);
@@ -189,70 +190,70 @@ public class DailyWeightActivity extends BaseActivity {
         return R.layout.activity_daily_weight;
     }
 
-    @OnClick(R.id.send_btn)
-    public void onClick() {
-        final String weight = weightEt.getText().toString().trim();
-        System.out.println("......................................................");
-        long time = System.currentTimeMillis();
-        dataSet.addEntry(new Entry(time, Float.parseFloat(weight)));
-        Log.i("time", simpleDateFormat.format(new Date(System.currentTimeMillis())));
-        chart.setData(new LineData(dataSet));
-//        chart.notifyDataSetChanged();
-        chart.invalidate();
-    }
+//    @OnClick(R.id.send_btn)
+//    public void onClick() {
+//        final String weight = weightEt.getText().toString().trim();
+//        System.out.println("......................................................");
+//        long time = System.currentTimeMillis();
+//        dataSet.addEntry(new Entry(time, Float.parseFloat(weight)));
+//        Log.i("time", simpleDateFormat.format(new Date(System.currentTimeMillis())));
+//        chart.setData(new LineData(dataSet));
+////        chart.notifyDataSetChanged();
+//        chart.invalidate();
+//    }
 
-    public void onViewClicked() {
-        final String weight = weightEt.getText().toString().trim();
-        final String date = TimeUtil.getDate().split("-")[2];
-        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_WEIGHT_TABLE_NAME);
-        query.whereEqualTo(TableUtil.DAILY_WEIGHT_USER, mAVUserFinal);
-        query.findInBackground(new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> avObjects, AVException avException) {
-                if (avException == null) {
-                    if (avObjects == null || avObjects.size() == 0) {
-                        AVObject avObject = new AVObject(TableUtil.DAILY_WEIGHT_TABLE_NAME);
-                        List<String> list = new ArrayList<>();
-                        list.add("00|" + mAVUserFinal.get(TableUtil.USER_WEIGHT));
-                        list.add(date + "|" + weight);
-                        avObject.put(TableUtil.DAILY_WEIGHT_ARRAY, list);
-                        avObject.put(TableUtil.DAILY_WEIGHT_USER, mAVUserFinal);
-                        avObject.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(AVException e) {
-                                if (e == null) {
-                                    toast("上传成功", 0);
-                                    getData();
-                                } else {
-                                    Log.e(TAG, "done: " + e.getMessage());
-                                }
-                            }
-                        });
-                    } else {
-                        AVObject avObject = avObjects.get(0);
-                        Log.i(TAG, "done: " + avObject.getObjectId());
-                        List<String> list = avObject.getList(TableUtil.DAILY_WEIGHT_ARRAY);
-                        list.add(date + "|" + weight);
-                        avObject.put(TableUtil.DAILY_WEIGHT_ARRAY, list);
-                        avObject.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(AVException e) {
-                                if (e == null) {
-                                    toast("上传成功", 0);
-                                    getData();
-                                } else {
-                                    Log.e(TAG, "done: " + e.getMessage());
-                                }
-                            }
-                        });
-
-                    }
-                } else {
-                    Log.e(TAG, "done: " + avException.getMessage());
-                }
-            }
-        });
-    }
+//    public void onViewClicked() {
+//        final String weight = weightEt.getText().toString().trim();
+//        final String date = TimeUtil.getDate().split("-")[2];
+//        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_WEIGHT_TABLE_NAME);
+//        query.whereEqualTo(TableUtil.DAILY_WEIGHT_USER, mAVUserFinal);
+//        query.findInBackground(new FindCallback<AVObject>() {
+//            @Override
+//            public void done(List<AVObject> avObjects, AVException avException) {
+//                if (avException == null) {
+//                    if (avObjects == null || avObjects.size() == 0) {
+//                        AVObject avObject = new AVObject(TableUtil.DAILY_WEIGHT_TABLE_NAME);
+//                        List<String> list = new ArrayList<>();
+//                        list.add("00|" + mAVUserFinal.get(TableUtil.USER_WEIGHT));
+//                        list.add(date + "|" + weight);
+//                        avObject.put(TableUtil.DAILY_WEIGHT_ARRAY, list);
+//                        avObject.put(TableUtil.DAILY_WEIGHT_USER, mAVUserFinal);
+//                        avObject.saveInBackground(new SaveCallback() {
+//                            @Override
+//                            public void done(AVException e) {
+//                                if (e == null) {
+//                                    toast("上传成功", 0);
+//                                    getData();
+//                                } else {
+//                                    Log.e(TAG, "done: " + e.getMessage());
+//                                }
+//                            }
+//                        });
+//                    } else {
+//                        AVObject avObject = avObjects.get(0);
+//                        Log.i(TAG, "done: " + avObject.getObjectId());
+//                        List<String> list = avObject.getList(TableUtil.DAILY_WEIGHT_ARRAY);
+//                        list.add(date + "|" + weight);
+//                        avObject.put(TableUtil.DAILY_WEIGHT_ARRAY, list);
+//                        avObject.saveInBackground(new SaveCallback() {
+//                            @Override
+//                            public void done(AVException e) {
+//                                if (e == null) {
+//                                    toast("上传成功", 0);
+//                                    getData();
+//                                } else {
+//                                    Log.e(TAG, "done: " + e.getMessage());
+//                                }
+//                            }
+//                        });
+//
+//                    }
+//                } else {
+//                    Log.e(TAG, "done: " + avException.getMessage());
+//                }
+//            }
+//        });
+//    }
 
     public void getData() {
 

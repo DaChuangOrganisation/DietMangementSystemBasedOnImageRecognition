@@ -35,6 +35,15 @@
             android:text="每日应当摄入" />
 
         <TextView
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="千卡"
+            android:layout_alignTop="@id/textView6"
+            android:layout_toEndOf="@id/textView6"
+            android:layout_marginStart="5dp"/>
+
+        <TextView
             android:id="@+id/daily_more_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,6 +52,13 @@
             android:layout_marginBottom="14dp"
             android:gravity="center"
             android:text="今日还可摄入" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="千卡"
+            android:layout_alignTop="@id/daily_more_tv"
+            android:layout_alignStart="@id/label"/>
 
         <TextView
             android:id="@+id/daily_date_tv"
