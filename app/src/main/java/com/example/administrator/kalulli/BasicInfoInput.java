@@ -85,13 +85,11 @@ public class BasicInfoInput extends BaseActivity {
         } );
     }
     public void saveuserinfo(){
-
-        if(username.getText().toString()!=null&&username.getText().toString()!=""&&
-                age.getText().toString()!=null&&age.getText().toString()!=""&&
-                height.getText().toString()!=null&&height.getText().toString()!=""&&
-                weight.getText().toString()!=null&&weight.getText().toString()!=""&&
-                sex!=null&&sex!=0
-        ) {
+        if (username.getText().toString()!=null&&!username.getText().toString().equals( "" )&&
+                age.getText().toString()!=null&&!age.getText().toString().equals( "" )&&
+                height.getText().toString()!=null&&!height.getText().toString().equals( "" )&&
+                weight.getText().toString()!=null&&!weight.getText().toString().equals( "" )&&
+                sex!=null&&sex!=0){
             usernameStr = username.getText().toString();
             ageInt = Integer.parseInt( age.getText().toString() );
             heightInt = Integer.parseInt( height.getText().toString() );
@@ -101,23 +99,27 @@ public class BasicInfoInput extends BaseActivity {
             }
             else
                 gender1 = "女";
-
+            if(heightInt>220||heightInt<150){
+                Toast.makeText(this,"请重新输入身高（范围:150-220)", Toast.LENGTH_LONG).show();
+            }
+            else if (weightInt>100||weightInt<40){
+                Toast.makeText(this,"请重新输入体重（范围：40-100）", Toast.LENGTH_LONG).show();
+            }
+            else{
                 userinfo.setAge( ageInt );
                 userinfo.setHeight( heightInt );
                 userinfo.setName( usernameStr );
                 userinfo.setWeight( weightInt );
-
                 userinfo.setGender( gender1 );
-
-            userinfo.saveOrUpdateData();
-            bl = true;
-            boolStr = "true";
-            SharePreUtil.put( mContext,"boolStr",boolStr );
+                userinfo.saveOrUpdateData();
+                bl = true;
+                boolStr = "true";
+                SharePreUtil.put( mContext,"boolStr",boolStr );
 //            Toast.makeText(BasicInfoInput.this,"boolStr==true！", Toast.LENGTH_LONG).show();
 //            ExcelUtil.importSheetToDB( this,"FoodCalorieData.xls" );
-            Toast.makeText(BasicInfoInput.this,"正在进入，请稍后...", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"正在进入，请稍后...", Toast.LENGTH_LONG).show();
 
-            /*提示信息*/
+                /*提示信息*/
 //            new Thread(new Runnable() {
 //                @Override
 //                public void run() {
@@ -128,26 +130,26 @@ public class BasicInfoInput extends BaseActivity {
 //                    }
 //                        }
 //            }).start();
-            new Handler().postDelayed( new Runnable() {
-                @Override
-                public void run() {
-                }
-            }, 1000);
-            Intent it = new Intent(  );
-            it.setClass( BasicInfoInput.this,MainActivity.class );
-            BasicInfoInput.this.startActivity( it );
+                new Handler().postDelayed( new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                }, 1000);
+                Intent it = new Intent(  );
+                it.setClass( BasicInfoInput.this,MainActivity.class );
+                BasicInfoInput.this.startActivity( it );
 
-            new Handler().postDelayed( new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                }
-            }, 1000);
+                new Handler().postDelayed( new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, 1000);
+            }
         }
+
         else{
-
-            Toast.makeText(BasicInfoInput.this,"请填写基本信息！", Toast.LENGTH_LONG).show();
-
+            Toast.makeText(this,"请填写基本信息！", Toast.LENGTH_LONG).show();
         }
     }
     @Override
