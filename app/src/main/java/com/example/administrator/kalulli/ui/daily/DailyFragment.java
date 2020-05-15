@@ -45,6 +45,8 @@ public class DailyFragment extends Fragment {
 
     private static final String TAG = "DailyFragment";
 
+    @BindView(R.id.textView6)
+    TextView dailyNeedTv;
     @BindView(R.id.daily_more_tv)
     TextView dailyMoreTv;
     @BindView(R.id.daily_date_tv)
@@ -132,17 +134,19 @@ public class DailyFragment extends Fragment {
         if (user != null) {
             return HealthUtil.getKC(user.getHeight(), user.getWeight(), user.getAge(), user.getGender());
         }
-        return 0.0;
+        return 0;
     }
 
     private void getData() {
 
         // 用户今日还需摄入的卡路里
-        double finalNeedCalorie = getTodayCalorie() - getKC();
+        double dailyNeedCalorie = getKC();
+        double finalNeedCalorie = getTodayCalorie() - dailyNeedCalorie;
+        dailyNeedTv.setText(String.format("每日应当摄入 %.2f 千卡", dailyNeedCalorie));
         if (finalNeedCalorie > 0) {
-            dailyMoreTv.setText(String.format("%s 千卡", finalNeedCalorie));
+            dailyMoreTv.setText(String.format("今日还需摄入 %s 千卡", finalNeedCalorie));
         } else {
-            dailyMoreTv.setText("0 千卡");
+            dailyMoreTv.setText("今日还需摄入 0 千卡");
         }
 
 //        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_TABLE_NAME);
