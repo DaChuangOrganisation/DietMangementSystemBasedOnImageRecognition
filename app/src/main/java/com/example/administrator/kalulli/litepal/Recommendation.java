@@ -1,7 +1,11 @@
 package com.example.administrator.kalulli.litepal;
 
+import android.util.Log;
+
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
+
+import java.util.List;
 
 //用于推荐的菜品类
 public class Recommendation extends LitePalSupport implements DataManipulation {
@@ -11,16 +15,44 @@ public class Recommendation extends LitePalSupport implements DataManipulation {
     double calorie;//所含卡路里
     String imgUrl;//食物图片链接
     String remark;//食物评价
+    double carbohydrate;//碳水化合物
+    double fat;//脂肪
+    double protein;//蛋白质
+    double cellulose;//纤维素
 
     public Recommendation() {
     }
 
-    public Recommendation(String classification, String name, double calorie, String imgUrl, String remark) {
-        this.classification = classification;
-        this.name = name;
-        this.calorie = calorie;
-        this.imgUrl = imgUrl;
-        this.remark = remark;
+    public double getCarbohydrate() {
+        return carbohydrate;
+    }
+
+    public void setCarbohydrate(double carbohydrate) {
+        this.carbohydrate = carbohydrate;
+    }
+
+    public double getFat() {
+        return fat;
+    }
+
+    public void setFat(double fat) {
+        this.fat = fat;
+    }
+
+    public double getProtein() {
+        return protein;
+    }
+
+    public void setProtein(double protein) {
+        this.protein = protein;
+    }
+
+    public double getCellulose() {
+        return cellulose;
+    }
+
+    public void setCellulose(double cellulose) {
+        this.cellulose = cellulose;
     }
 
     public String getImgUrl() {
@@ -83,6 +115,22 @@ public class Recommendation extends LitePalSupport implements DataManipulation {
 
     @Override
     public String toString() {
-        return String.format("name:%s calorie:%f classification:%s",name,calorie,classification);
+        return String.format("name:%s calorie:%f classification:%s %f %f %f %f",
+                name,calorie,classification,carbohydrate,fat,protein,cellulose);
     }
+
+    public static FoodNutrition getFoodNutrition(String foodName){
+        FoodNutrition nutrition = null;
+        List<Recommendation> recommendations = LitePal
+                .where("name like ?","%"+foodName+"%")
+                .find(Recommendation.class);
+        if(recommendations!=null){
+            Recommendation r =  recommendations.get(0);
+            nutrition.setCarbohydrate(r.getCarbohydrate());
+            nutrition.setFat(r.getFat());
+            nutrition.setCellulose(r.cellulose);
+        }
+        return nutrition;
+    }
+
 }

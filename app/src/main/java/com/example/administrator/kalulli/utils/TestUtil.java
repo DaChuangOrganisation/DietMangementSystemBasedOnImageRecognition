@@ -3,6 +3,8 @@ package com.example.administrator.kalulli.utils;
 import android.app.Activity;
 import android.util.Log;
 
+import com.example.administrator.kalulli.litepal.FoodNutrition;
+import com.example.administrator.kalulli.litepal.NutritionUtil;
 import com.example.administrator.kalulli.litepal.Recommendation;
 
 import org.litepal.LitePal;
@@ -21,11 +23,13 @@ public class TestUtil {
         Log.e(TAG,String.format("加载数据运行时间:%f s",(endTime-startTime)/1000.0));
     }
     public static void test2(Activity context){
-       List<Recommendation> recommendations = LitePal.where("name=?","油条，又叫小油条").find(Recommendation.class);
-
-        for (Recommendation r:recommendations) {
-
-            Log.d(TAG,r.toString());
+        List<Recommendation> recommendations = LitePal
+                .where("name like ?","%鸡蛋%")
+                .find(Recommendation.class);
+        if(recommendations!=null){
+            for (Recommendation r: recommendations) {
+                Log.d(TAG,r.toString());
+            }
         }
     }
 }

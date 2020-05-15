@@ -14,11 +14,18 @@ import java.util.regex.*;
 //有关excel表格文件的工具类
 public class ExcelUtil {
 
+    //判断一个字符串是否为"-"
+    private static double convertToDouble(String nutrition){
+         if("一".contentEquals(nutrition)){
+             return 0;
+        }
+        return Double.parseDouble(nutrition);
+    }
+
     public static void importSheetToDB(Activity context,String file) {
         try {
             String pattern1 = "：[0-9]{2,3}";
             String pattern2 = "[0-9]{2,3}";
-            String pattern3 = "";
             Pattern r1 = Pattern.compile(pattern1);
             Pattern r2 = Pattern.compile(pattern2);
             Matcher matcher1;
@@ -56,12 +63,21 @@ public class ExcelUtil {
                         remark = remark.substring(remark.indexOf("：")+1);
                     //url
                     String url = sheet.getCell(3,j).getContents();
+                    //提取营养成分
+                    double carbohydrate = convertToDouble(sheet.getCell(4,j).getContents());
+                    double fat = convertToDouble(sheet.getCell(5,j).getContents());
+                    double protein = convertToDouble(sheet.getCell(6,j).getContents());
+                    double cellulose = convertToDouble(sheet.getCell(7,j).getContents());
 
                     recommendation.setClassification(classification);//设置分类
                     recommendation.setName(foodName);//设置食物名称
                     recommendation.setCalorie(calorie);//设置卡路里值
                     recommendation.setRemark(remark);
                     recommendation.setImgUrl(url);
+                    recommendation.setCarbohydrate(carbohydrate);
+                    recommendation.setFat(fat);
+                    recommendation.setProtein(protein);
+                    recommendation.setCellulose(cellulose);
                     recommendation.save();
                 }
             }

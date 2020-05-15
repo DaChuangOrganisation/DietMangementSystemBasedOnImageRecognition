@@ -19,7 +19,7 @@ import okhttp3.Response;
 
 public class NutritionUtil{
     private static final String TAG = "NutritionUtil";
-    private static String result = null;
+    private static String result = null;//149.129.62.232
     private final static String preUrl = "http://39.97.171.144:3000/demo/";
     private static String fullUrl;
     private static Runnable networkTask = new Runnable() {
@@ -59,7 +59,7 @@ public class NutritionUtil{
         Thread th = new Thread(networkTask);
         th.start();
         try {
-            Thread.currentThread().join(5000);
+            Thread.currentThread().join(10000);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
