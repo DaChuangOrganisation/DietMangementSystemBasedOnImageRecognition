@@ -11,6 +11,6 @@
         android:icon="@drawable/ic_today_black_24dp"
         android:title="日记"/>
     <item android:id="@+id/me_item"
-        android:icon="@drawable/ic_person_black_24dp"
-        android:title="我的"/>
+        android:icon="@drawable/ic_sentiment_very_satisfied_black_24dp"
+        android:title="我"/>
 </menu>

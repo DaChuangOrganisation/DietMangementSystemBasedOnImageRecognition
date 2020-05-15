@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.administrator.kalulli.ui.daily.DailyWeightActivity">
+
     <RelativeLayout
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary">
 
         <ImageView
             android:id="@+id/back_daily_img"
@@ -28,31 +29,33 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="体重曲线图"
-            android:textStyle="bold"
             android:textColor="@color/colorWhite"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
+
     <EditText
-        android:hint="更新体重"
-        android:layout_margin="15dp"
         android:id="@+id/weight_et"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
-
-        android:id="@+id/send_btn"
-        android:layout_gravity="center"
-        android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:hint="更新体重" />
+
+    <Button
+        android:id="@+id/send_btn"
+        android:layout_width="150dp"
+        android:layout_height="37dp"
+        android:layout_gravity="center"
         android:layout_margin="15dp"
         android:background="@color/colorPrimary"
         android:text="录入"
         android:textColor="@color/colorWhite" />
+
     <com.github.mikephil.charting.charts.LineChart
-        android:layout_marginTop="100dp"
-        android:layout_margin="15dp"
         android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="250dp" />
+        android:layout_height="250dp"
+        android:layout_margin="15dp"
+        android:layout_marginTop="100dp" />
 </LinearLayout>
