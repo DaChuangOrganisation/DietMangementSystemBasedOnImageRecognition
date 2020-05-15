@@ -52,10 +52,10 @@ public class ExcelUtil {
                     }
                     //remark（去掉评价两个字）
                     String remark = sheet.getCell(2, j).getContents();
-                    if(remark=="评价：")
+                    if("评价：".contentEquals(remark))
                         remark = "暂无评价";
                     else
-                        remark = remark.substring(0,remark.indexOf("："));
+                        remark = remark.substring(remark.indexOf("：")+1);
                     //url
                     String url = sheet.getCell(3,j).getContents();
 
