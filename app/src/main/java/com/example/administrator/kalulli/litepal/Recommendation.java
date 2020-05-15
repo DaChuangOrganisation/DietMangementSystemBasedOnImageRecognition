@@ -63,6 +63,6 @@ public class Recommendation extends LitePalSupport implements DataManipulation {
 
     @Override
     public String toString() {
-        return name;
+        return String.format("name:%s calorie:%f classification:%s",name,calorie,classification);
     }
 }

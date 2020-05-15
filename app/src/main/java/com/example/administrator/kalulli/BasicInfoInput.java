@@ -116,7 +116,7 @@ public class BasicInfoInput extends BaseActivity {
             Intent it = new Intent(  );
             it.setClass( BasicInfoInput.this,MainActivity.class );
             BasicInfoInput.this.startActivity( it );
-            mActivity.finish();
+            this.finish();
         }
         else{
 

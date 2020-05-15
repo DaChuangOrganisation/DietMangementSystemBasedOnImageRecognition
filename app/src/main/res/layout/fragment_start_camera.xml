@@ -3,16 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash"
+    android:background="#f2f2f2"
     tools:context="com.example.administrator.kalulli.ui.camera.StartCameraFragment">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="拍照以获取食物卡路里"
+        android:gravity="center"
+        android:textSize="20dp"
+        />
 
     <ImageView
         android:id="@+id/camera"
-        android:layout_width="137dp"
-        android:layout_height="133dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="30dp"
         android:src="@drawable/cameranew" />
 </RelativeLayout>
+<!--    android:background="@drawable/splash"-->

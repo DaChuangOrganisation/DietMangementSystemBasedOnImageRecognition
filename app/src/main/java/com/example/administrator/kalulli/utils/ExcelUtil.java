@@ -28,7 +28,7 @@ public class ExcelUtil {
             for(int i =0; i<11; i++){
                 Sheet sheet = book.getSheet(0);
                 String classification = sheet.getName();
-                for (int j = 0; j < sheet.getRows(); ++j) {
+                for (int j = 1; j < sheet.getRows(); ++j) { //忽略第一行
                     Recommendation recommendation = new Recommendation();
                     String foodName = sheet.getCell(0, j).getContents();//从sheet中获取数据
                     String calorieStr = sheet.getCell(1, j).getContents();
