@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,11 +116,11 @@ public class DailyFragment extends Fragment {
         double dailyNeedCalorie = DailyUtil.getTodayCalorie();
         double finalNeedCalorie = DailyUtil.getNeedCalorie();
 
-        dailyNeedTv.setText(String.format("每日应当摄入 %.0f", dailyNeedCalorie));
+        dailyNeedTv.setText(String.format("每日应当摄入 %.0f ", dailyNeedCalorie));
         if (finalNeedCalorie > 0) {
-            dailyMoreTv.setText(String.format("今日还需摄入 %s", finalNeedCalorie));
+            dailyMoreTv.setText(String.format("今日还需摄入 %.0f ", 12.333));
         } else {
-            dailyMoreTv.setText("今日还需摄入 0");
+            dailyMoreTv.setText("今日还需摄入 0 ");
         }
 
 //        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_TABLE_NAME);
