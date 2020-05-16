@@ -46,6 +46,10 @@ public class MainActivity extends BaseActivity {
         for(User user1:user)
         {
             Log.e("MainActivity","id: "+user1.getId()+"姓名： "+user1.getName()+"体重： "+user1.getWeight()+"性别： "+user1.getGender());
+            Log.e("MainActivity","RandomNum: "+String.valueOf( user1.getRandom( 1,10 )));
+            Log.e("MainActivity","BMI: "+String.valueOf( user1.suggest_BMI()));
+            Log.e("MainActivity","Dishes: "+user1.getDishes());
+
         }
         if (mSavedInstanceState==null){
             ActivityUtils.replaceFragmentToActivity(mFragmentManager, StartCameraFragment.getInstance(),R.id.content_main);
