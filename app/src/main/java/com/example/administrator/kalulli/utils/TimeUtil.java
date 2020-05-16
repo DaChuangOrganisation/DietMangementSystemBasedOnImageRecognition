@@ -63,4 +63,13 @@ public class TimeUtil {
     public static String dateToFloat(long date) {
         return simpleDateFormat.format(new Date(date));
     }
+
+    private static SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("HH", Locale.CHINA);
+
+    /**
+     * 获取date对应的小时
+     */
+    public static int hourOfDay(Date date) {
+        return Integer.parseInt(simpleDateFormat2.format(date));
+    }
 }
