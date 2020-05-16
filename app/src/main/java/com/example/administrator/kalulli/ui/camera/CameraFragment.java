@@ -89,18 +89,18 @@ public class CameraFragment extends Fragment {
                         options.put("filter_threshold", "0.7");
                         options.put("baike_num", "1");
                         str = SaveBitmap.saveImageToGallery(getActivity(),bitmap);
-                        //API识别获得数据
-//                        JSONObject res = SampleUtil.client.dishDetect(str, options);
-//                        Log.i(TAG, "run: "+res.toString());
-//                        //Log.i(TAG, "run: "+res.toString());
-//                        jsonObject = res;
+//                        API识别获得数据
+                        JSONObject res = SampleUtil.client.dishDetect(str, options);
+                        Log.i(TAG, "run: "+res.toString());
+                        //Log.i(TAG, "run: "+res.toString());
+                        jsonObject = res;
 
                         //以下手动获得数据便于测试
-                        try {
-                            jsonObject = getJsonObject();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            jsonObject = getJsonObject();
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
                         //以上手动获得数据便于测试
 
                         Message message = Message.obtain();

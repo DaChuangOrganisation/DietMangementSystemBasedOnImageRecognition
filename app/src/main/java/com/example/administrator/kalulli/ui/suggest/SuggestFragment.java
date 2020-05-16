@@ -161,8 +161,9 @@ public class SuggestFragment extends Fragment
         int BMILevel = user.suggest_BMI();
         double remainingCalorie = DailyUtil.getNeedCalorie();
         int remainingMeal = user.getDishes();//api
+        Log.d(TAG,"剩余卡路里："+String.valueOf(remainingCalorie)+" 剩余餐数:"+String.valueOf(remainingMeal));
         if(remainingCalorie<0 || remainingMeal==0) {
-            Toast.makeText(getContext(), "今日饮食已达标!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "今日饮食已达标或已过晚餐时间!", Toast.LENGTH_SHORT).show();
             rfabHelper.collapseContent();
             return;
         }
