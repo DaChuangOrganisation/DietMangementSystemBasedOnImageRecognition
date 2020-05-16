@@ -166,18 +166,27 @@ public class DailyUtil {
     }
 
     public static List<DailyCalorie> getDailyFoodList() throws ParseException {
-        //获取今日首尾时间戳
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS");
-        SimpleDateFormat tft = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        long startTime = ft.parse(tft.format(date) + " 00:00:00:000").getTime();
-        long endTime = ft.parse(tft.format(date) + " 23:59:59:999").getTime();
-        Log.i(TAG, "starttime" + date);
-        Log.i(TAG, "endtime" + endTime);
-        List<DailyCalorie> dcList = LitePal.where("date>=? and date<=?", String.valueOf(startTime), String.valueOf(endTime))
+//        //获取今日首尾时间戳
+//        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS");
+//        SimpleDateFormat tft = new SimpleDateFormat("yyyy-MM-dd");
+//        Date date = new Date();
+//        long startTime = ft.parse(tft.format(date) + " 00:00:00:000").getTime();
+//        long endTime = ft.parse(tft.format(date) + " 23:59:59:999").getTime();
+//        Log.i(TAG, "starttime" + date);
+//        Log.i(TAG, "endtime" + endTime);
+//        List<DailyCalorie> dcList = LitePal.where("date>=? and date<=?", String.valueOf(startTime), String.valueOf(endTime))
+//                .find(DailyCalorie.class, true);
+//        Log.i(TAG, "listsize" + dcList.size());
+//        return dcList;
+        //修改获取Dailycalorie的方法
+        long todayMillis = TimeUtil.todayToMillis();
+        List<DailyCalorie> dailyCalories = LitePal
+                .where("date>=? and date<?",
+                        String.valueOf(todayMillis),
+                        String.valueOf(todayMillis + DateUtils.DAY_IN_MILLIS))
                 .find(DailyCalorie.class, true);
-        Log.i(TAG, "listsize" + dcList.size());
-        return dcList;
+
+        return dailyCalories;
     }
 
     /**

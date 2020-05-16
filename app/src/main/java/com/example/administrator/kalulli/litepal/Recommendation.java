@@ -126,7 +126,7 @@ public class Recommendation extends LitePalSupport implements DataManipulation {
     }
 
     public static FoodNutrition getFoodNutrition(String foodName){
-        FoodNutrition nutrition = null;
+        FoodNutrition nutrition = new FoodNutrition();
         List<Recommendation> recommendations = LitePal
                 .where("name like ?","%"+foodName+"%")
                 .find(Recommendation.class);
@@ -134,8 +134,13 @@ public class Recommendation extends LitePalSupport implements DataManipulation {
             Recommendation r =  recommendations.get(0);
             nutrition.setCarbohydrate(r.getCarbohydrate());
             nutrition.setFat(r.getFat());
-            nutrition.setCellulose(r.cellulose);
+            nutrition.setCellulose(r.getCellulose());
+            nutrition.setProtein(r.getProtein());
         }
+        else{
+            Log.i("CameraResultActivity", "recommendations nulled");
+        }
+
         return nutrition;
     }
 

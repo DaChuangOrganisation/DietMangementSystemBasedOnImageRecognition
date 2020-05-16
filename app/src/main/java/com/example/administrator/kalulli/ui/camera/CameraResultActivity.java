@@ -21,8 +21,12 @@ import com.example.administrator.kalulli.base.BaseActivity;
 import com.example.administrator.kalulli.data.FoodJson;
 import com.example.administrator.kalulli.litepal.DailyCalorie;
 import com.example.administrator.kalulli.litepal.FoodItem;
+import com.example.administrator.kalulli.litepal.FoodNutrition;
+import com.example.administrator.kalulli.litepal.NutritionUtil;
+import com.example.administrator.kalulli.litepal.Recommendation;
 import com.example.administrator.kalulli.ui.adapter.CameraResultAdapter;
 import com.example.administrator.kalulli.utils.ComputerTypeUtil;
+import com.example.administrator.kalulli.utils.DailyUtil;
 import com.example.administrator.kalulli.utils.TableUtil;
 import com.example.administrator.kalulli.utils.TimeUtil;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -94,6 +98,30 @@ public class CameraResultActivity extends BaseActivity {
                     object1.getString("calorie"),
                     bundle.getString("str"),
                     description);
+            //获取具体营养成本
+            double protein=0;
+            double fat=0;
+            double carbohydrate=0;
+            double cellulose=0;
+            Log.i(TAG,"15464646");
+            try{
+                FoodNutrition nutrition;
+                nutrition = Recommendation.getFoodNutrition(object1.getString("name"));
+                if(nutrition==null){
+                    Log.i(TAG,"nutrition null first");
+                    nutrition = NutritionUtil.getFoodNutritionOnline(object1.getString("name"));
+                }
+                protein=nutrition.getProtein();
+                fat=nutrition.getFat();
+                carbohydrate=nutrition.getCarbohydrate();
+                cellulose=nutrition.getCellulose();
+            }catch (Exception e){
+                Log.e(TAG,e.getMessage() + object1.getString("name"));
+            }
+            foodJson.push("蛋白质", protein + "g");
+            foodJson.push("脂肪", fat + "g");
+            foodJson.push("碳水化合物", carbohydrate + "g");
+            foodJson.push("纤维素", cellulose + "g");
 
             list.add(foodJson);
             //Log.i(TAG, "logicActivity: "+ strings[7]);
@@ -121,14 +149,24 @@ public class CameraResultActivity extends BaseActivity {
         loadingPut.show();
         Log.i(TAG, "onViewClicked: click");
         try{
+            //每天为一个Dailycalorie对象
             FoodJson tFoodJson=list.get(0);
             Date date=new Date();
             FoodItem item1=new FoodItem(tFoodJson.getFoodname(),Double.parseDouble(tFoodJson.getNumber()),date,tFoodJson.getPicture_url());
-            DailyCalorie dc1 = new DailyCalorie();
+            item1.setDate(date);
+            //DailyCalorie dc1 = new DailyCalorie(); 每次新建dc
+            List<DailyCalorie> dailyCalories= DailyUtil.getDailyFoodList();//获取今日DailyCalorie
+            DailyCalorie dc1;
+            if(dailyCalories.size()>0){
+                dc1 = dailyCalories.get(0);
+            }
+            else{
+                dc1 = new DailyCalorie();
+                dc1.setDate(date);
+            }
             item1.saveOrUpdateData();
             dc1.getItemList().add(item1);
             item1.setDailyCalorie(dc1);
-            dc1.setDate(new Date());
             dc1.setTotalIntake(dc1.getTotalIntake()+item1.getCalorie());
             dc1.saveOrUpdateData();
             loadingPut.hide();
