@@ -15,7 +15,7 @@ import java.util.regex.*;
 public class ExcelUtil {
 
     //判断一个字符串是否为"-"
-    private static double convertToDouble(String nutrition){
+    public static double convertToDouble(String nutrition){
          if("一".contentEquals(nutrition)){
              return 0;
         }

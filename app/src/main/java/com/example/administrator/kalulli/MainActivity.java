@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.administrator.kalulli.base.BaseActivity;
+import com.example.administrator.kalulli.litepal.NutritionUtil;
 import com.example.administrator.kalulli.litepal.User;
 import com.example.administrator.kalulli.ui.camera.StartCameraFragment;
 import com.example.administrator.kalulli.ui.daily.DailyFragment;
@@ -80,7 +81,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 //        TestUtil.test(this);//用于测试
-        TestUtil.test2(this);
+//        TestUtil.test2(this);
     }
 
     @Override

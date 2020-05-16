@@ -13,7 +13,7 @@ public class FoodNutrition{
 
     @Override
     public String toString(){
-        return String.format("蛋白质：%f　脂肪：%f　碳水化合物：%f",protein,fat,carbohydrate);
+        return String.format("蛋白质：%f　脂肪：%f　碳水化合物：%f 纤维素：%f",protein,fat,carbohydrate,cellulose);
     }
 
     public double getCellulose() {

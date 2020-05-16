@@ -5,7 +5,13 @@ import android.util.Log;
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 //用于推荐的菜品类
 public class Recommendation extends LitePalSupport implements DataManipulation {
@@ -132,5 +138,7 @@ public class Recommendation extends LitePalSupport implements DataManipulation {
         }
         return nutrition;
     }
+
+
 
 }
