@@ -88,10 +88,19 @@ public class FoodJson {
         }
     }
 
+    /**
+     * 填入食物的营养物质组成，以及含量
+     *
+     * @param name 营养物质民
+     * @param value 含量
+     */
     public void push(String name, String value) {
         this.elements.add(new Element(name, value));
     }
 
+    /**
+     * 清空该食物的营养物质组成列表
+     */
     public void clear() {
         this.elements.clear();
     }

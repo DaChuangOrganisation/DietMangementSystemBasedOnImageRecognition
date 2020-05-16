@@ -35,7 +35,6 @@ public class Weight extends LitePalSupport implements DataManipulation {
     }
 
     @Override
-
     public boolean saveOrUpdateData() {
         return this.save();
     }

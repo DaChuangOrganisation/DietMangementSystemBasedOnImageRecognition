@@ -95,10 +95,6 @@ public class CameraResultActivity extends BaseActivity {
                     bundle.getString("str"),
                     description);
 
-            foodJson.push("成分1", "0.00g");
-            foodJson.push("成分2", "0.00mg");
-            foodJson.push("成分3", "0.00mg");
-
             list.add(foodJson);
             //Log.i(TAG, "logicActivity: "+ strings[7]);
 
