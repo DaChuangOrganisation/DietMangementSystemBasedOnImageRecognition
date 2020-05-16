@@ -113,7 +113,7 @@ public class DailyFragment extends Fragment {
 
     private void getData() {
         // 用户今日还需摄入的卡路里
-        double dailyNeedCalorie = DailyUtil.getTodayCalorie();
+        double dailyNeedCalorie = DailyUtil.getKC();
         double finalNeedCalorie = DailyUtil.getNeedCalorie();
 
         dailyNeedTv.setText(String.format("每日应当摄入 %.0f ", dailyNeedCalorie));
