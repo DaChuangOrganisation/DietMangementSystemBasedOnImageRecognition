@@ -66,7 +66,7 @@ public class CameraResultAdapter extends RecyclerView.Adapter<CameraResultAdapte
         holder.name.setText(list.get(position).getFoodname());
         Glide.with(context)
                 .load(list.get(position).getPicture_url()).placeholder(R.drawable.eat)
-                .override(100, 100)//指定图片大小
+                .override(300, 300)//指定图片大小
                 .into(holder.imageView);
         Toast.makeText(context, "" + list.get(position).getElements().size(), Toast.LENGTH_LONG).show();
         //适配器复用

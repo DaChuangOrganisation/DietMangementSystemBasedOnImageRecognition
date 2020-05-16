@@ -137,6 +137,10 @@ public class Recommendation extends LitePalSupport implements DataManipulation {
             nutrition.setCellulose(r.getCellulose());
             nutrition.setProtein(r.getProtein());
         }
+        else{
+            Log.i("CameraResultActivity", "recommendations nulled");
+        }
+
         return nutrition;
     }
 
