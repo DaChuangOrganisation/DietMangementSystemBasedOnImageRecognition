@@ -1,9 +1,15 @@
 package com.example.administrator.kalulli.litepal;
 
+import android.util.Log;
+
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class User extends LitePalSupport implements DataManipulation {
@@ -144,6 +150,46 @@ public class User extends LitePalSupport implements DataManipulation {
             return 4;//过胖  蔬果和菌藻_
         }
 
+
     }
+    public int getRandom(int min, int max){
+        int num;
+        num = (int) Math.floor( Math.random()*(max-min)+min );
+        return num;
+    }
+    public  int getDishes(){
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
+        Log.e("MainActivity","NowSystemTime: "+df.format(new Date()));
+        String breakfast = "7:00:00";
+        String lunchtime = "11:00:00";
+        String dinner = "17:00:00";
+        String nowtime = df.format( new Date(  ) );
+        if(timeCompare(nowtime,breakfast)<0){
+            return 3;
+        }
+        if(timeCompare( nowtime,lunchtime )<0){
+            return 2;
+        }
+        if(timeCompare( nowtime,dinner )<0){
+            return 1;
+        }
+        return 0;
+    }
+
+        public static int timeCompare(String t1,String t2){
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            Calendar c1=Calendar.getInstance();
+            Calendar c2= Calendar.getInstance();
+            try {
+                c1.setTime(formatter.parse(t1));
+                c2.setTime(formatter.parse(t2));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            int result=c1.compareTo(c2);
+            return result;
+        }
+
+
 
 }
