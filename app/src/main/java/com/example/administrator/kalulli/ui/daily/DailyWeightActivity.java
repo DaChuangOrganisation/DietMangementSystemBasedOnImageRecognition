@@ -26,6 +26,7 @@ import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.BaseActivity;
 import com.example.administrator.kalulli.litepal.DailyCalorie;
 import com.example.administrator.kalulli.litepal.Weight;
+import com.example.administrator.kalulli.utils.DailyUtil;
 import com.example.administrator.kalulli.utils.TableUtil;
 import com.example.administrator.kalulli.utils.TimeUtil;
 import com.github.mikephil.charting.charts.LineChart;
@@ -241,25 +242,6 @@ public class DailyWeightActivity extends BaseActivity {
         return R.layout.activity_daily_weight;
     }
 
-    private <T> List<T> get15DayOfData(Class<T> modelClass) {
-        long todayMillis = TimeUtil.todayToMillis();
-        long upper = todayMillis + DateUtils.DAY_IN_MILLIS;
-        long floor = todayMillis - 14 * DateUtils.DAY_IN_MILLIS;
-        return getDataByTime(modelClass, floor, upper);
-    }
-
-    private <T> List<T> getToDayOfData(Class<T> modelClass) {
-        long todayMillis = TimeUtil.todayToMillis();
-        return getDataByTime(modelClass, todayMillis, todayMillis + DateUtils.DAY_IN_MILLIS);
-    }
-
-    private <T> List<T> getDataByTime(Class<T> modelClass, long floor, long upper) {
-        return LitePal
-                .where("date>=? and date<?", String.valueOf(floor), String.valueOf(upper))
-                .order("date")
-                .find(modelClass);
-    }
-
     @OnClick(R.id.send_btn)
     public void onClick() {
         final String inputWeight = weightEt.getText().toString().trim();
@@ -272,7 +254,7 @@ public class DailyWeightActivity extends BaseActivity {
             return;
         }
 
-        List<Weight> weights = getToDayOfData(Weight.class);
+        List<Weight> weights = DailyUtil.getToDayOfData(Weight.class);
         Weight weight = null;
         if (weights.size() > 0) {
             weight = LitePal.find(Weight.class, weights.get(0).getId());

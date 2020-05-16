@@ -8,6 +8,7 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.GetCallback;
 import com.example.administrator.kalulli.litepal.DailyCalorie;
+import com.example.administrator.kalulli.litepal.FoodItem;
 import com.example.administrator.kalulli.litepal.User;
 
 import org.litepal.LitePal;
@@ -215,6 +216,95 @@ public class DailyUtil {
     public static double getNeedCalorie() {
         double finalNeedCalorie = getKC() - getTodayCalorie();
         return finalNeedCalorie < 0 ? 0 : finalNeedCalorie;
+    }
+
+    /**
+     * 获取最近15天的某个表的数据
+     */
+    public static <T> List<T> get15DayOfData(Class<T> modelClass) {
+        long todayMillis = TimeUtil.todayToMillis();
+        long upper = todayMillis + DateUtils.DAY_IN_MILLIS;
+        long floor = todayMillis - 14 * DateUtils.DAY_IN_MILLIS;
+        return getDataByTime(modelClass, floor, upper);
+    }
+
+    /**
+     * 获取最近15天的某个表的数据
+     */
+    public static <T> List<T> get15DayOfData(Class<T> modelClass, boolean isEager) {
+        long todayMillis = TimeUtil.todayToMillis();
+        long upper = todayMillis + DateUtils.DAY_IN_MILLIS;
+        long floor = todayMillis - 14 * DateUtils.DAY_IN_MILLIS;
+        return getDataByTime(modelClass, floor, upper, isEager);
+    }
+
+    /**
+     * 获取今天的某个表的数据
+     */
+    public static <T> List<T> getToDayOfData(Class<T> modelClass) {
+        long todayMillis = TimeUtil.todayToMillis();
+        return getDataByTime(modelClass, todayMillis, todayMillis + DateUtils.DAY_IN_MILLIS);
+    }
+
+    /**
+     * 获取今天的某个表的数据
+     */
+    public static <T> List<T> getToDayOfData(Class<T> modelClass, boolean isEager) {
+        long todayMillis = TimeUtil.todayToMillis();
+        return getDataByTime(modelClass, todayMillis, todayMillis + DateUtils.DAY_IN_MILLIS, isEager);
+    }
+
+    /**
+     * 获取某个时间段的某个表的数据
+     */
+    public static <T> List<T> getDataByTime(Class<T> modelClass, long floor, long upper) {
+        return LitePal
+                .where("date>=? and date<?", String.valueOf(floor), String.valueOf(upper))
+                .order("date")
+                .find(modelClass);
+    }
+
+    /**
+     * 获取某个时间段的某个表的数据
+     */
+    public static <T> List<T> getDataByTime(Class<T> modelClass, long floor, long upper, boolean isEager) {
+        return LitePal
+                .where("date>=? and date<?", String.valueOf(floor), String.valueOf(upper))
+                .order("date")
+                .find(modelClass, isEager);
+    }
+
+    /**
+     * 通过判断今天的DailyCalories中FoodItem添加的时间来判断是早餐,中餐,晚餐哪一种情况
+     * 1表示早餐：6-8点
+     * 2表示中餐：11-13点
+     * 3表示晚餐：18-20点
+     */
+    public static int foodType(int n) {
+        if (n >= 6 && n <= 8) {
+            return 1;
+        } else if (n >= 11 && n <= 13) {
+            return 2;
+        } else if (n >= 18 && n <= 20) {
+            return 3;
+        }
+        return 0;
+    }
+
+    /**
+     * 统计今天吃了几餐
+     */
+    public static int count() {
+        List<DailyCalorie> dailyCalories = DailyUtil.getToDayOfData(DailyCalorie.class, true);
+        if (dailyCalories.size() > 0) {
+            List<FoodItem> itemList = dailyCalories.get(0).getItemList();
+            return (int) itemList
+                    .stream()
+                    .mapToInt(foodItem -> foodType(TimeUtil.hourOfDay(foodItem.getDate())))
+                    .filter(a -> a > 0)
+                    .count();
+        }
+        return 0;
     }
 
 }
