@@ -34,6 +34,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import org.litepal.LitePal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -72,6 +73,7 @@ public class DailyFragment extends Fragment {
     @BindView(R.id.weight_btn)
     Button weightBtn;
     private String id;
+    List<DailyCalorie> dcList=new ArrayList<>();
 
     private Handler handler = new Handler() {
         @Override
@@ -113,59 +115,59 @@ public class DailyFragment extends Fragment {
 
     private void getData() {
         // 用户今日还需摄入的卡路里
-        double dailyNeedCalorie = DailyUtil.getTodayCalorie();
+        double dailyNeedCalorie = DailyUtil.getKC();
         double finalNeedCalorie = DailyUtil.getNeedCalorie();
 
         dailyNeedTv.setText(String.format("每日应当摄入 %.0f", dailyNeedCalorie));
         if (finalNeedCalorie > 0) {
-            dailyMoreTv.setText(String.format("今日还需摄入 %s", finalNeedCalorie));
+            dailyMoreTv.setText(String.format("今日还需摄入 %.0f", finalNeedCalorie));
         } else {
             dailyMoreTv.setText("今日还需摄入 0");
         }
-
-//        AVQuery<AVObject> query = new AVQuery<>(TableUtil.DAILY_TABLE_NAME);
-//        query.whereEqualTo(TableUtil.DAILY_USER, AVUser.getCurrentUser());
-//        query.whereEqualTo(TableUtil.DAILY_DATE, TimeUtil.getDate());
-//        // 如果这样写，第二个条件将覆盖第一个条件，查询只会返回 priority = 1 的结果
-//        query.findInBackground(new FindCallback<AVObject>() {
-//            @Override
-//            public void done(List<AVObject> list, AVException e) {
-//                if (e == null) {
-//                    if (list == null || list.size() == 0) {
-//                        morningTv.setText("未摄取");
-//                        afternoonTv.setText("未摄取");
-//                        eveningTv.setText("未摄取");
-//                        dailyMoreTv.setText((int) Double.parseDouble(HealthUtil.getKC()) + "千卡");
-//                    } else {
-//                        AVObject avObject = list.get(0);
-//                        id = avObject.getObjectId();
-//                        double sum = 0.0;
-//                        if (avObject.get(TableUtil.DAILY_MORNING) != null && !avObject.get(TableUtil.DAILY_MORNING).equals("")) {
-//                            morningTv.setText(avObject.get(TableUtil.DAILY_MORNING).toString());
-//                            sum += Double.parseDouble(avObject.get(TableUtil.DAILY_MORNING).toString());
-//                        } else {
-//                            sum += 0;
-//                        }
-//                        if (avObject.get(TableUtil.DAILY_AFTERNOON) != null && !avObject.get(TableUtil.DAILY_AFTERNOON).equals("")) {
-//                            afternoonTv.setText(avObject.get(TableUtil.DAILY_AFTERNOON).toString());
-//                            sum += Double.parseDouble(avObject.get(TableUtil.DAILY_AFTERNOON).toString());
-//                        } else {
-//                            sum += 0;
-//                        }
-//                        if (avObject.get(TableUtil.DAILY_EVENING) != null && !avObject.get(TableUtil.DAILY_EVENING).equals("")) {
-//                            eveningTv.setText(avObject.get(TableUtil.DAILY_EVENING).toString());
-//                            sum += Double.parseDouble(avObject.get(TableUtil.DAILY_EVENING).toString());
-//                        } else {
-//                            sum += 0;
-//                        }
-//                        dailyMoreTv.setText((int) Double.parseDouble(HealthUtil.getKC()) - sum + "千卡");
-//                    }
-//
-//                } else {
-//                    Log.e(TAG, "done: " + e.getMessage());
-//                }
+        /*
+         * 显示早餐、午餐、晚餐卡路里数
+         * */
+        try {
+            dcList= DailyUtil.getDailyFoodList();
+//            for (DailyCalorie dc:
+//                 dcList) {
+//                dc.deleteData();
 //            }
-//        });
+            if(dcList.size()!=0){
+                double breakfastSum=0;
+                double lunchSum=0;
+                double dinnerSum=0;
+                DailyCalorie dc=dcList.get(0);
+//                for (DailyCalorie dc:
+//                        dcList) {
+                for (FoodItem foodItem:
+                        dc.getItemList()) {
+                    if(foodItem.getDate().getHours()<12){
+                        breakfastSum+=foodItem.getCalorie();
+                    }
+                    if(foodItem.getDate().getHours()>=12 && dc.getDate().getHours()<18){
+                        lunchSum+=foodItem.getCalorie();
+                    }
+                    if(foodItem.getDate().getHours()>=18){
+                        dinnerSum+=foodItem.getCalorie();
+                    }
+                }
+                if(breakfastSum!=0){
+                    morningTv.setText(String.valueOf(breakfastSum)+"千卡");
+                }
+                if(lunchSum!=0){
+                    afternoonTv.setText(String.valueOf(lunchSum)+"千卡");
+                }
+                if(dinnerSum!=0){
+                    eveningTv.setText(String.valueOf(dinnerSum)+"千卡");
+                }
+            }
+        } catch (Exception e) {
+            afternoonTv.setText(String.valueOf(1));
+            Log.e(TAG, "done: " + e.getMessage());
+        }
+
+
     }
 
     @Override
@@ -173,6 +175,78 @@ public class DailyFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    @OnClick(R.id.Breakfast_btn)
+    public void onViewClickedBreakfast(){
+        List<FoodItem> bf=new ArrayList<>();
+        if(dcList.size()!=0){
+            DailyCalorie dc=dcList.get(0);
+            for (FoodItem foodItem:
+                 dc.getItemList()) {
+                if(foodItem.getDate().getHours()<12){
+                    bf.add(foodItem);
+                }
+            }
+        }
+        ArrayList<FoodItem> Breakfast=new ArrayList<FoodItem>();
+        Breakfast.addAll(bf);
+        Intent intent=new Intent();
+        intent.putParcelableArrayListExtra("com.example.administrator.kalulli.litepal.FoodItem",Breakfast);
+        intent.putExtra("type",1);
+        intent.setClass(getContext(),DailyDetailActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.Lunch_btn)
+    public void onViewClickedLunch(){
+        List<FoodItem> bf=new ArrayList<>();
+        if(dcList.size()!=0){
+            DailyCalorie dc=dcList.get(0);
+            for (FoodItem foodItem:
+                    dc.getItemList()) {
+                if(foodItem.getDate().getHours()>=12 && foodItem.getDate().getHours()<18){
+                    bf.add(foodItem);
+                }
+            }
+        }
+        ArrayList<FoodItem> Breakfast=new ArrayList<FoodItem>();
+        Breakfast.addAll(bf);
+        Intent intent=new Intent();
+        intent.putParcelableArrayListExtra("com.example.administrator.kalulli.litepal.FoodItem",Breakfast);
+        intent.putExtra("type",1);
+        intent.setClass(getContext(),DailyDetailActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.Dinner_btn)
+    public void onViewClickedDinner(){
+        List<FoodItem> bf=new ArrayList<>();
+//        for (DailyCalorie dc:
+//                dcList) {
+//            if(dc.getDate().getHours()>=18){
+//                if(dc.getItemList().size()!=0){
+//                    bf.add(dc.getItemList().get(0));
+//                }
+//            }
+//        }
+        if(dcList.size()!=0){
+            DailyCalorie dc=dcList.get(0);
+            for (FoodItem foodItem:
+                    dc.getItemList()) {
+                if(foodItem.getDate().getHours()>=18){
+                    bf.add(foodItem);
+                }
+            }
+        }
+        ArrayList<FoodItem> Breakfast=new ArrayList<FoodItem>();
+        Breakfast.addAll(bf);
+        Intent intent=new Intent();
+        intent.putParcelableArrayListExtra("com.example.administrator.kalulli.litepal.FoodItem",Breakfast);
+        intent.putExtra("type",1);
+        intent.setClass(getContext(),DailyDetailActivity.class);
+        startActivity(intent);
+    }
+
 
     @OnClick(R.id.daily_btn)
     public void onViewClicked() {

@@ -23,6 +23,7 @@ import com.example.administrator.kalulli.litepal.DailyCalorie;
 import com.example.administrator.kalulli.litepal.FoodItem;
 import com.example.administrator.kalulli.ui.adapter.CameraResultAdapter;
 import com.example.administrator.kalulli.utils.ComputerTypeUtil;
+import com.example.administrator.kalulli.utils.DailyUtil;
 import com.example.administrator.kalulli.utils.TableUtil;
 import com.example.administrator.kalulli.utils.TimeUtil;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -121,14 +122,24 @@ public class CameraResultActivity extends BaseActivity {
         loadingPut.show();
         Log.i(TAG, "onViewClicked: click");
         try{
+            //每天为一个Dailycalorie对象
             FoodJson tFoodJson=list.get(0);
             Date date=new Date();
             FoodItem item1=new FoodItem(tFoodJson.getFoodname(),Double.parseDouble(tFoodJson.getNumber()),date,tFoodJson.getPicture_url());
-            DailyCalorie dc1 = new DailyCalorie();
+            item1.setDate(date);
+            //DailyCalorie dc1 = new DailyCalorie(); 每次新建dc
+            List<DailyCalorie> dailyCalories= DailyUtil.getDailyFoodList();//获取今日DailyCalorie
+            DailyCalorie dc1;
+            if(dailyCalories.size()>0){
+                dc1 = dailyCalories.get(0);
+            }
+            else{
+                dc1 = new DailyCalorie();
+                dc1.setDate(date);
+            }
             item1.saveOrUpdateData();
             dc1.getItemList().add(item1);
             item1.setDailyCalorie(dc1);
-            dc1.setDate(new Date());
             dc1.setTotalIntake(dc1.getTotalIntake()+item1.getCalorie());
             dc1.saveOrUpdateData();
             loadingPut.hide();
