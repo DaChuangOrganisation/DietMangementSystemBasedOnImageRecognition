@@ -1,6 +1,7 @@
 package com.example.administrator.kalulli.utils;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.example.administrator.kalulli.litepal.Recommendation;
 
@@ -13,7 +14,7 @@ import jxl.read.biff.BiffException;
 import java.util.regex.*;
 //有关excel表格文件的工具类
 public class ExcelUtil {
-
+    private static final String TAG = "ExcelUtil";
     //判断一个字符串是否为"-"
     public static double convertToDouble(String nutrition){
          if("一".contentEquals(nutrition)){
@@ -35,7 +36,11 @@ public class ExcelUtil {
             Workbook book = Workbook.getWorkbook(is);
             for(int i =0; i<11; i++){
                 Sheet sheet = book.getSheet(i);
+                //去除分类名称中多余的字符
                 String classification = sheet.getName();
+                classification = classification.substring(0,classification.indexOf("_"));
+//                Log.d(TAG,classification);
+
                 for (int j = 1; j < sheet.getRows(); ++j) { //j=1,忽略第一行
                     Recommendation recommendation = new Recommendation();
                     //简化名称
