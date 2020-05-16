@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.administrator.kalulli.base.BaseActivity;
+import com.example.administrator.kalulli.litepal.NutritionUtil;
 import com.example.administrator.kalulli.litepal.User;
 import com.example.administrator.kalulli.ui.camera.StartCameraFragment;
 import com.example.administrator.kalulli.ui.daily.DailyFragment;
@@ -44,6 +45,10 @@ public class MainActivity extends BaseActivity {
         for(User user1:user)
         {
             Log.e("MainActivity","id: "+user1.getId()+"姓名： "+user1.getName()+"体重： "+user1.getWeight()+"性别： "+user1.getGender());
+            Log.e("MainActivity","RandomNum: "+String.valueOf( user1.getRandom( 1,10 )));
+            Log.e("MainActivity","BMI: "+String.valueOf( user1.suggest_BMI()));
+            Log.e("MainActivity","Dishes: "+user1.getDishes());
+
         }
         if (mSavedInstanceState==null){
             ActivityUtils.replaceFragmentToActivity(mFragmentManager, StartCameraFragment.getInstance(),R.id.content_main);
@@ -80,7 +85,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 //        TestUtil.test(this);//用于测试
-        TestUtil.test2(this);
+//        TestUtil.test2(this);
     }
 
     @Override

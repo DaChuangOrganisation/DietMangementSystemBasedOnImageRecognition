@@ -12,12 +12,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.OnClickListener;
 import com.example.administrator.kalulli.litepal.Recommendation;
+import com.example.administrator.kalulli.litepal.User;
 import com.example.administrator.kalulli.ui.adapter.SuggestAdapter;
+import com.example.administrator.kalulli.ui.daily.DailyFragment;
+import com.example.administrator.kalulli.utils.DailyUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
 import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper;
@@ -44,7 +48,9 @@ public class SuggestFragment extends Fragment
 
     public static int number = 0;
     public static Map<String,Integer>map = new HashMap();
-
+    private static String[] classifications = {"谷薯芋、杂豆、主食", "蛋类、肉类及制品",
+            "奶类及制品","蔬果和菌藻","坚果、大豆及制品","饮料","食用油、油脂及制品",
+            "调味品","零食、点心、冷饮","其它","菜肴"};
 
     private static final String TAG = "SuggestFragment";
     @BindView(R.id.suggest_recyclerView)
@@ -118,25 +124,11 @@ public class SuggestFragment extends Fragment
         rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
         List<RFACLabelItem> items = new ArrayList<>();
         items.add(new RFACLabelItem<Integer>()
-                .setLabel("早餐推荐")
+                .setLabel("每日推荐")
                 .setResId(R.drawable.ic_add_black_24dp)
                 .setIconNormalColor(0xffd84315)
                 .setIconPressedColor(0xffbf360c)
                 .setWrapper(1)
-        );
-        items.add(new RFACLabelItem<Integer>()
-                .setLabel("午餐推荐")
-                .setResId(R.drawable.ic_add_black_24dp)
-                .setIconNormalColor(0xffd84315)
-                .setIconPressedColor(0xffbf360c)
-                .setWrapper(2)
-        );
-        items.add(new RFACLabelItem<Integer>()
-                .setLabel("晚餐推荐")
-                .setResId(R.drawable.ic_add_black_24dp)
-                .setIconNormalColor(0xffd84315)
-                .setIconPressedColor(0xffbf360c)
-                .setWrapper(3)
         );
         rfaContent
                 .setItems(items)
@@ -165,25 +157,68 @@ public class SuggestFragment extends Fragment
 
     @Override
     public void onRFACItemIconClick(int position, RFACLabelItem item) {
+        User user = LitePal.findFirst(User.class);
+        int BMILevel = user.suggest_BMI();
+        double remainingCalorie = DailyUtil.getNeedCalorie();
+        if(remainingCalorie<0)
+            Toast.makeText(getContext(), "今日饮食已达标!", Toast.LENGTH_SHORT).show();
+        int remainingMeal = user.getDishes();//api
+        SuggestAdapter adapter = null;
+        List<Recommendation> finalRecommendations = null;
+        String[] categories = null;
         switch (position){
             case 0:
-                recommendations = LitePal.where("name = ?","菜心")
-                        .find(Recommendation.class);
-                Log.d(TAG,"推荐菜品个数：" + String.valueOf(recommendations.size()));
-                SuggestAdapter adapter = new SuggestAdapter(recommendations,getContext());
-                suggestRecyclerView.setAdapter(adapter);
-                suggestRecyclerView.setLayoutManager(layoutManager);
-                break;
-            case 1:
-                break;
-            case 2:
+                switch (BMILevel){
+                    case 1://菜肴  谷薯芋、杂豆、主食  蛋类、肉类及制品
+                        categories = new String[]{"菜肴","谷薯芋、杂豆、主食","蛋类、肉类及制品"};
+                        break;
+                    case 2://谷薯芋、杂豆、主食 坚果、大豆及制品   蔬果和菌藻 奶类及制品
+                        categories = new String[]{"谷薯芋、杂豆、主食","坚果、大豆及制品","蔬果和菌藻 奶类及制品"};
+                        break;
+                    case 3://谷薯芋、杂豆、主食  蔬果和菌藻
+                        categories = new String[]{"谷薯芋、杂豆、主食","蔬果和菌藻"};
+                        break;
+                    case 4://蔬果和菌藻
+                        categories = new String[]{"蔬果和菌藻"};
+                        break;
+                }
+                finalRecommendations = recommendationAlgorithm(categories,remainingCalorie,remainingMeal);
+                List<Recommendation> cuttedRecommendations = new ArrayList<>();
+                for(int i=0;i<remainingMeal;){
+                    int randomNumber = user.getRandom(0,finalRecommendations.size()-1);//api
+                    Recommendation pickoutOne = finalRecommendations.get(randomNumber);
+                    if(!cuttedRecommendations.contains(pickoutOne)){//非重复推荐
+                        cuttedRecommendations.add(pickoutOne);
+                        i++;
+                    }
+                }
+                adapter = new SuggestAdapter(finalRecommendations,getContext());
                 break;
         }
+        suggestRecyclerView.setAdapter(adapter);
+        suggestRecyclerView.setLayoutManager(layoutManager);
         rfabHelper.collapseContent();
     }
 
     //推荐算法
-    public void recommendationAlgorithm(){
+    private List<Recommendation> recommendationAlgorithm(String[] categories,double remainCalorie,int remainMeal){
+        List<Recommendation> recommendations = new ArrayList<>();
+        String singleCalorie = String.valueOf(Double.valueOf(remainCalorie).intValue()/remainMeal);
+        for(int i = 0;i<categories.length;i++){
+            List<Recommendation> metRecommendations = LitePal.where("classification=? and calorie<=?",categories[i],singleCalorie)
+                    .limit(remainMeal)
+                    .find(Recommendation.class);
+            unionList(recommendations,metRecommendations);
+        }
+        return recommendations;
+    }
 
+    private List<Recommendation> unionList(List<Recommendation> beJoined, List<Recommendation> join){
+        if(join.size()!=0){
+            for (Recommendation r:join) {
+                beJoined.add(r);
+            }
+        }
+        return beJoined;
     }
 }

@@ -35,36 +35,52 @@
 
     </RelativeLayout>
 
-    <!--    <EditText-->
-    <!--        android:id="@+id/weight_et"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_margin="15dp"-->
-    <!--        android:hint="更新体重" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <!--    <Button-->
-    <!--        android:id="@+id/send_btn"-->
-    <!--        android:layout_width="150dp"-->
-    <!--        android:layout_height="37dp"-->
-    <!--        android:layout_gravity="center"-->
-    <!--        android:layout_margin="15dp"-->
-    <!--        android:background="@color/colorPrimary"-->
-    <!--        android:text="录入"-->
-    <!--        android:textColor="@color/colorWhite" />-->
+        <EditText
+            android:id="@+id/weight_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_weight="1"
+            android:hint="更新体重" />
+
+        <Button
+            android:id="@+id/send_btn"
+            android:layout_width="150dp"
+            android:layout_height="37dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="录入"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tip_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
-        android:text="注: 下图显示最近15天的卡路里变化" />
+        android:layout_marginTop="10dp"
+        android:text="注: 下图显示最近15天的数据变化" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/weight_chart"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="15dp" />
+
 </LinearLayout>

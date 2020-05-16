@@ -3,13 +3,19 @@ package com.example.administrator.kalulli.litepal;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.example.administrator.kalulli.litepal.FoodNutrition;
+import com.example.administrator.kalulli.utils.ExcelUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -78,6 +84,37 @@ public class NutritionUtil{
             }
 
         }
+        return nutrition;
+    }
+
+    public static FoodNutrition getFoodNutritionOnline(String foodName){
+        FoodNutrition nutrition = new FoodNutrition();
+        fullUrl = "http://149.129.62.232:8000/";
+
+        Thread th = new Thread(networkTask);
+        th.start();
+        try {
+            Thread.currentThread().join(2000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String patternStr = "(?!=\')[0-9]+.[0-9]+(?!=\')";
+        Log.d(TAG,result);
+        Pattern pattern = Pattern.compile(patternStr);
+        Matcher matcher = pattern.matcher(result);
+
+        List<Double> values = new ArrayList<>();
+        while (matcher.find()){
+            double value = ExcelUtil.convertToDouble(matcher.group(0));
+            values.add(new Double(value));
+        }
+        nutrition.setCarbohydrate(values.get(0));
+        nutrition.setFat(values.get(1));
+        nutrition.setProtein(values.get(2));
+        nutrition.setCellulose(values.get(3));
+
         return nutrition;
     }
 

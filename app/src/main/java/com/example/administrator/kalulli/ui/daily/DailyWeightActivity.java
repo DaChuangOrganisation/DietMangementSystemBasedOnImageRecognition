@@ -1,5 +1,6 @@
 package com.example.administrator.kalulli.ui.daily;
 
+import android.content.ContentValues;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
@@ -23,6 +25,7 @@ import com.avos.avoscloud.SaveCallback;
 import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.BaseActivity;
 import com.example.administrator.kalulli.litepal.DailyCalorie;
+import com.example.administrator.kalulli.litepal.Weight;
 import com.example.administrator.kalulli.utils.TableUtil;
 import com.example.administrator.kalulli.utils.TimeUtil;
 import com.github.mikephil.charting.charts.LineChart;
@@ -59,22 +62,24 @@ import butterknife.OnClick;
 public class DailyWeightActivity extends BaseActivity {
 
     private static final String TAG = "DailyWeightActivity";
-    //    @BindView(R.id.weight_et)
-//    EditText weightEt;
-//    @BindView(R.id.send_btn)
-//    Button send_btn;
+    @BindView(R.id.weight_et)
+    EditText weightEt;
+    @BindView(R.id.send_btn)
+    Button send_btn;
     @BindView(R.id.chart)
     LineChart chart;
     @BindView(R.id.back_daily_img)
     ImageView backDailyImg;
     @BindView(R.id.tip_tv)
     TextView tipTv;
+    @BindView(R.id.weight_chart)
+    LineChart weightChart;
 
+    private List<Entry> weightEntries = new ArrayList<>();
     private List<Entry> entries = new ArrayList<>();
     private List<String> meList = new ArrayList<>();
     private LineDataSet dataSet;
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
     private final SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("MM-dd", Locale.US);
 
     private Handler handler = new Handler() {
@@ -95,6 +100,13 @@ public class DailyWeightActivity extends BaseActivity {
      * 初始化表格
      */
     private void initChart() {
+        getData();
+
+        configChart(chart, new LineDataSet(entries, "每日卡路里"));
+        configChart(weightChart, new LineDataSet(weightEntries, "每日体重"));
+    }
+
+    private void getData() {
         // 获取最近15天的数据
         long todayMillis = TimeUtil.todayToMillis();
         long upper = todayMillis + DateUtils.DAY_IN_MILLIS;
@@ -104,39 +116,66 @@ public class DailyWeightActivity extends BaseActivity {
                 .order("date")
                 .find(DailyCalorie.class);
 
+        List<Weight> weights = LitePal
+                .where("date>=? and date<?", String.valueOf(floor), String.valueOf(upper))
+                .order("date")
+                .find(Weight.class);
+
         // 测试
 //        List<DailyCalorie> dailyCalories = new ArrayList<>();
+//        List<Weight> weights = new ArrayList<>();
 //        for (int i = 0; i < 15; i++) {
+//            Date date = new Date(TimeUtil.todayToMillis() + 12 * DateUtils.HOUR_IN_MILLIS - i * DateUtils.DAY_IN_MILLIS);
+//
 //            DailyCalorie dailyCalorie = new DailyCalorie();
-//            dailyCalorie.setDate(new Date(TimeUtil.todayToMillis() + 12 * DateUtils.HOUR_IN_MILLIS - i * DateUtils.DAY_IN_MILLIS));
+//            dailyCalorie.setDate(date);
 //            dailyCalorie.setTotalIntake((15 - i) * 10);
 //            dailyCalories.add(dailyCalorie);
+//
+//            Weight weight = new Weight();
+//            weight.setWeight(i * 10);
+//            weight.setDate(date);
+//            weights.add(weight);
 //        }
 
-        if (dailyCalories.size() == 0) {
-            tipTv.setText("最近15天没有卡路里相关数据");
-            chart.setVisibility(View.INVISIBLE);
-            return;
-        }
+//        if (dailyCalories.size() == 0) {
+//            tipTv.setText("最近15天没有相关数据");
+//            chart.setVisibility(View.INVISIBLE);
+//            weightChart.setVisibility(View.INVISIBLE);
+//            return;
+//        }
 
         // 以日期为key, 每日卡路里总量为value, 构建哈希表，目的是消除属于同一天的多个DailyCalorie
         HashMap<String, Double> hashMap = new HashMap<>();
-        dailyCalories.forEach(dailyCalorie -> hashMap.put(TimeUtil.dateToFloat(dailyCalorie.getDate()), dailyCalorie.getTotalIntake()));
+        dailyCalories.forEach(dailyCalorie -> hashMap.put(simpleDateFormat.format(dailyCalorie.getDate()), dailyCalorie.getTotalIntake()));
+
+        HashMap<String, Double> weightHashMap = new HashMap<>();
+        weights.forEach(weight -> weightHashMap.put(simpleDateFormat.format(weight.getDate()), weight.getWeight()));
+
+        if (weightEntries.size() > 0) {
+            entries.clear();
+            weightEntries.clear();
+        }
 
         // 为图表输入数据，如果某天没有数据，则显示为0
         for (int i = 0; i < 15; i++) {
             long currentMillis = todayMillis + 12 * DateUtils.HOUR_IN_MILLIS - i * DateUtils.DAY_IN_MILLIS;
-            Double a = hashMap.get(TimeUtil.dateToFloat(currentMillis));
+            Double a = hashMap.get(simpleDateFormat.format(currentMillis));
             if (a != null) {
                 entries.add(new Entry(15 - i, a.floatValue()));
             } else {
                 entries.add(new Entry(15 - i, 0f));
             }
+            Double b = weightHashMap.get(simpleDateFormat.format(new Date(currentMillis)));
+            weightEntries.add(new Entry(15 - i, (b != null) ? b.floatValue() : 0f));
         }
 
         Collections.sort(entries, new EntryXComparator());
+        Collections.sort(weightEntries, new EntryXComparator());
+    }
 
-//        Description description = new Description();
+    private void configChart(LineChart chart, LineDataSet dataSet) {
+        //        Description description = new Description();
 //        description.setText("日期");
 //        description.setTextSize(15);
         chart.setNoDataText("当前还没有数据");
@@ -172,7 +211,7 @@ public class DailyWeightActivity extends BaseActivity {
         axisRight.setEnabled(false);
 
         //2
-        dataSet = new LineDataSet(entries, "每日卡路里");
+//        dataSet = new LineDataSet(entries, "每日卡路里");
         dataSet.setCubicIntensity(0.2f);
         dataSet.setDrawFilled(true);
         dataSet.setDrawCircles(false);
@@ -191,6 +230,7 @@ public class DailyWeightActivity extends BaseActivity {
         chart.invalidate(); // refresh
     }
 
+
     @Override
     protected void logicActivity(Bundle mSavedInstanceState) {
 //        getData();
@@ -201,17 +241,52 @@ public class DailyWeightActivity extends BaseActivity {
         return R.layout.activity_daily_weight;
     }
 
-//    @OnClick(R.id.send_btn)
-//    public void onClick() {
-//        final String weight = weightEt.getText().toString().trim();
-//        System.out.println("......................................................");
-//        long time = System.currentTimeMillis();
-//        dataSet.addEntry(new Entry(time, Float.parseFloat(weight)));
-//        Log.i("time", simpleDateFormat.format(new Date(System.currentTimeMillis())));
-//        chart.setData(new LineData(dataSet));
-////        chart.notifyDataSetChanged();
-//        chart.invalidate();
-//    }
+    private <T> List<T> get15DayOfData(Class<T> modelClass) {
+        long todayMillis = TimeUtil.todayToMillis();
+        long upper = todayMillis + DateUtils.DAY_IN_MILLIS;
+        long floor = todayMillis - 14 * DateUtils.DAY_IN_MILLIS;
+        return getDataByTime(modelClass, floor, upper);
+    }
+
+    private <T> List<T> getToDayOfData(Class<T> modelClass) {
+        long todayMillis = TimeUtil.todayToMillis();
+        return getDataByTime(modelClass, todayMillis, todayMillis + DateUtils.DAY_IN_MILLIS);
+    }
+
+    private <T> List<T> getDataByTime(Class<T> modelClass, long floor, long upper) {
+        return LitePal
+                .where("date>=? and date<?", String.valueOf(floor), String.valueOf(upper))
+                .order("date")
+                .find(modelClass);
+    }
+
+    @OnClick(R.id.send_btn)
+    public void onClick() {
+        final String inputWeight = weightEt.getText().toString().trim();
+
+        double newValue = 0;
+        try {
+            newValue = Double.parseDouble(inputWeight);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "输入数据无效", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        List<Weight> weights = getToDayOfData(Weight.class);
+        Weight weight = null;
+        if (weights.size() > 0) {
+            weight = LitePal.find(Weight.class, weights.get(0).getId());
+        } else {
+            weight = new Weight();
+        }
+        weight.setWeight(newValue);
+        weight.setDate(new Date());
+        weight.saveOrUpdateData();
+
+        System.out.println("......................................................");
+
+        initChart();
+    }
 
 //    public void onViewClicked() {
 //        final String weight = weightEt.getText().toString().trim();
@@ -265,10 +340,6 @@ public class DailyWeightActivity extends BaseActivity {
 //            }
 //        });
 //    }
-
-    public void getData() {
-
-    }
 
     @OnClick(R.id.back_daily_img)
     public void onViewClicked2() {
