@@ -100,6 +100,13 @@ public class DailyWeightActivity extends BaseActivity {
      * 初始化表格
      */
     private void initChart() {
+        getData();
+
+        configChart(chart, new LineDataSet(entries, "每日卡路里"));
+        configChart(weightChart, new LineDataSet(weightEntries, "每日体重"));
+    }
+
+    private void getData() {
         // 获取最近15天的数据
         long todayMillis = TimeUtil.todayToMillis();
         long upper = todayMillis + DateUtils.DAY_IN_MILLIS;
@@ -165,9 +172,6 @@ public class DailyWeightActivity extends BaseActivity {
 
         Collections.sort(entries, new EntryXComparator());
         Collections.sort(weightEntries, new EntryXComparator());
-
-        configChart(chart, new LineDataSet(entries, "每日卡路里"));
-        configChart(weightChart, new LineDataSet(weightEntries, "每日体重"));
     }
 
     private void configChart(LineChart chart, LineDataSet dataSet) {
@@ -336,10 +340,6 @@ public class DailyWeightActivity extends BaseActivity {
 //            }
 //        });
 //    }
-
-    public void getData() {
-
-    }
 
     @OnClick(R.id.back_daily_img)
     public void onViewClicked2() {

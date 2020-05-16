@@ -25,6 +25,7 @@ import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.litepal.DailyCalorie;
 import com.example.administrator.kalulli.litepal.FoodItem;
 import com.example.administrator.kalulli.litepal.User;
+import com.example.administrator.kalulli.utils.DailyUtil;
 import com.example.administrator.kalulli.utils.HealthUtil;
 import com.example.administrator.kalulli.utils.TableUtil;
 import com.example.administrator.kalulli.utils.TimeUtil;
@@ -109,39 +110,10 @@ public class DailyFragment extends Fragment {
         return view;
     }
 
-    /**
-     * 查询今日已经摄入的卡鲁里
-     */
-    public double getTodayCalorie() {
-        long todayMillis = TimeUtil.todayToMillis();
-        List<DailyCalorie> dailyCalories = LitePal
-                .where("date>=? and date<?",
-                        String.valueOf(todayMillis),
-                        String.valueOf(todayMillis + DateUtils.DAY_IN_MILLIS))
-                .find(DailyCalorie.class, true);
-
-        if (dailyCalories.size() > 0) {
-            return dailyCalories.get(0).getTotalIntake();
-        }
-
-        return 0;
-    }
-
-    /**
-     * 基于用户的信息，计算用户每日所需的卡路里。
-     */
-    private double getKC() {
-        User user = LitePal.findFirst(User.class, true);
-        if (user != null) {
-            return HealthUtil.getKC(user.getHeight(), user.getWeight(), user.getAge(), user.getGender());
-        }
-        return 0;
-    }
-
     private void getData() {
         // 用户今日还需摄入的卡路里
-        double dailyNeedCalorie = getKC();
-        double finalNeedCalorie = getTodayCalorie() - dailyNeedCalorie;
+        double dailyNeedCalorie = DailyUtil.getTodayCalorie();
+        double finalNeedCalorie = DailyUtil.getNeedCalorie();
 
         dailyNeedTv.setText(String.format("每日应当摄入 %.0f", dailyNeedCalorie));
         if (finalNeedCalorie > 0) {

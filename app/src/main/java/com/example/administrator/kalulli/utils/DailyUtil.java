@@ -1,5 +1,6 @@
 package com.example.administrator.kalulli.utils;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.avos.avoscloud.AVException;
@@ -7,6 +8,7 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.GetCallback;
 import com.example.administrator.kalulli.litepal.DailyCalorie;
+import com.example.administrator.kalulli.litepal.User;
 
 import org.litepal.LitePal;
 
@@ -22,6 +24,7 @@ import java.util.List;
 
 public class DailyUtil {
     private static final String TAG = "DailyUtil";
+
     public static String getPlanType() {
         AVUser avUser = AVUser.getCurrentUser();
         String healthType = HealthUtil.getHealth(avUser.get(TableUtil.USER_WEIGHT).toString(), avUser.get(TableUtil.USER_HEIGHT).toString());
@@ -37,7 +40,7 @@ public class DailyUtil {
 
     public static List<String> getPlanContent() {
         String s = getPlanType();
-        List<String>result = new ArrayList();
+        List<String> result = new ArrayList();
         switch (s) {
             case "减肥":
                 result.add(" 您目前的体重过重,请注意合理控制饮食");
@@ -63,96 +66,97 @@ public class DailyUtil {
         avObject.fetchInBackground(new GetCallback<AVObject>() {
             @Override
             public void done(AVObject object, AVException e) {
-                if (e == null){
+                if (e == null) {
                     Log.i(TAG, "done: testType");
                     String morning = avObject.get(TableUtil.DAILY_MORNING).toString();
                     String afternoon = avObject.get(TableUtil.DAILY_AFTERNOON).toString();
                     String evening = avObject.get(TableUtil.DAILY_EVENING).toString();
-                    if (morning == null || morning.equals("0")){
+                    if (morning == null || morning.equals("0")) {
                         result[0] = "不佳";
                         is[0] = false;
-                    }else  if (Double.parseDouble(morning) <= 50 || Double.parseDouble(morning) >= 350){
-                        result[0] = "不佳";
-                        is[0] = false;
-                    }
-                    if (afternoon == null || morning.equals("0")){
-                        result[0] = "不佳";
-                        is[0] = false;
-                    }else if (Double.parseDouble(afternoon) <= 150 || Double.parseDouble(afternoon) >= 650){
+                    } else if (Double.parseDouble(morning) <= 50 || Double.parseDouble(morning) >= 350) {
                         result[0] = "不佳";
                         is[0] = false;
                     }
-                    if (evening == null || evening.equals("0")){
+                    if (afternoon == null || morning.equals("0")) {
                         result[0] = "不佳";
                         is[0] = false;
-                    }else if (Double.parseDouble(evening) <= 50 || Double.parseDouble(evening) >= 450){
+                    } else if (Double.parseDouble(afternoon) <= 150 || Double.parseDouble(afternoon) >= 650) {
                         result[0] = "不佳";
                         is[0] = false;
                     }
-                }else{
-                    Log.e(TAG, "done: "+e.getMessage() );
+                    if (evening == null || evening.equals("0")) {
+                        result[0] = "不佳";
+                        is[0] = false;
+                    } else if (Double.parseDouble(evening) <= 50 || Double.parseDouble(evening) >= 450) {
+                        result[0] = "不佳";
+                        is[0] = false;
+                    }
+                } else {
+                    Log.e(TAG, "done: " + e.getMessage());
                 }
             }
         });
-        if (is[0]){
+        if (is[0]) {
             return "正常";
-        }else {
+        } else {
             return result[0];
         }
 
     }
+
     public static List<String> testContent(String objectId) {
         final String[] result = {""};
-        final List<String>list = new ArrayList<>();
+        final List<String> list = new ArrayList<>();
         final boolean[] is = {true};
         final AVObject avObject = AVObject.createWithoutData(TableUtil.DAILY_TABLE_NAME, objectId);
         avObject.fetchInBackground(new GetCallback<AVObject>() {
             @Override
             public void done(AVObject object, AVException e) {
-                if (e == null){
+                if (e == null) {
                     Log.i(TAG, "done:  e == null");
                     String morning = avObject.get(TableUtil.DAILY_MORNING).toString();
                     String afternoon = avObject.get(TableUtil.DAILY_AFTERNOON).toString();
                     String evening = avObject.get(TableUtil.DAILY_EVENING).toString();
                     //1
-                    if (morning == null || morning.equals("")){
+                    if (morning == null || morning.equals("")) {
                         is[0] = false;
                         list.add(" 吃早餐,每天都要吃早餐,保证代谢且每天食欲更加稳定");
-                    }else  if (Double.parseDouble(morning) <= 50 ||Double.parseDouble(morning) >= 350){
+                    } else if (Double.parseDouble(morning) <= 50 || Double.parseDouble(morning) >= 350) {
                         is[0] = false;
                         list.add(" 三餐要均衡搭配，进食过多过少都伤胃");
                     }
-                    if (afternoon == null || morning.equals("")){
+                    if (afternoon == null || morning.equals("")) {
                         is[0] = false;
                         list.add(" 午餐是三餐中比较重要的一餐哦，不吃午餐会导致身体呈现下坡的状态");
-                    }else if (Double.parseDouble(afternoon) <= 150 || Double.parseDouble(afternoon) >= 650){
+                    } else if (Double.parseDouble(afternoon) <= 150 || Double.parseDouble(afternoon) >= 650) {
                         is[0] = false;
                         list.add(" 午餐要吃饱哦，但是也不能吃的太多");
                     }
-                    if (evening == null || evening.equals("")){
+                    if (evening == null || evening.equals("")) {
                         is[0] = false;
                         list.add(" 晚餐十分重要,必须吃「好」。如果进食不当,过饱、过晚,都可能对人体健康造成一定的损害");
-                    }else if (Double.parseDouble(evening) <= 50 || Double.parseDouble(evening) >= 450){
+                    } else if (Double.parseDouble(evening) <= 50 || Double.parseDouble(evening) >= 450) {
                         is[0] = false;
                         list.add(" 晚餐要吃七分饱，每餐食物不可过多或者过少，避免大胃口哦");
                     }
                     //2
-                    if ((Double.parseDouble(morning) + Double.parseDouble(afternoon) + Double.parseDouble(evening)) <= 700){
+                    if ((Double.parseDouble(morning) + Double.parseDouble(afternoon) + Double.parseDouble(evening)) <= 700) {
                         is[0] = false;
                         list.add(" 您今天的热量摄取未能达标哦，要多吃点哦");
-                    }else if ((Double.parseDouble
-                            (morning) + Double.parseDouble(afternoon) + Double.parseDouble(evening)) > 700){
+                    } else if ((Double.parseDouble
+                            (morning) + Double.parseDouble(afternoon) + Double.parseDouble(evening)) > 700) {
                         is[0] = false;
                         list.add(" 您今天的热量过多,要注意多运动");
-                    }else{
-                        if (is[0]){
+                    } else {
+                        if (is[0]) {
                             list.add(" 您今天的热量摄取已经达标");
-                        }else {
+                        } else {
                             list.add(" 虽然总量达标了,还是要注意各餐分配合理哦");
                         }
                     }
-                }else{
-                    Log.e(TAG, "done: "+e.getMessage() );
+                } else {
+                    Log.e(TAG, "done: " + e.getMessage());
                 }
             }
         });
@@ -161,16 +165,56 @@ public class DailyUtil {
 
     public static List<DailyCalorie> getDailyFoodList() throws ParseException {
         //获取今日首尾时间戳
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss:SSS");
-        SimpleDateFormat tft = new SimpleDateFormat ("yyyy-MM-dd");
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS");
+        SimpleDateFormat tft = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
-        long startTime = ft.parse(tft.format(date)+" 00:00:00:000").getTime();
-        long endTime = ft.parse(tft.format(date)+" 23:59:59:999").getTime();
-        Log.i(TAG,"starttime"+date);
-        Log.i(TAG,"endtime"+endTime);
-        List<DailyCalorie> dcList= LitePal.where("date>=? and date<=?",String.valueOf(startTime),String.valueOf(endTime))
-                .find(DailyCalorie.class,true);
-        Log.i(TAG,"listsize"+dcList.size());
+        long startTime = ft.parse(tft.format(date) + " 00:00:00:000").getTime();
+        long endTime = ft.parse(tft.format(date) + " 23:59:59:999").getTime();
+        Log.i(TAG, "starttime" + date);
+        Log.i(TAG, "endtime" + endTime);
+        List<DailyCalorie> dcList = LitePal.where("date>=? and date<=?", String.valueOf(startTime), String.valueOf(endTime))
+                .find(DailyCalorie.class, true);
+        Log.i(TAG, "listsize" + dcList.size());
         return dcList;
     }
+
+    /**
+     * 查询今日已经摄入的卡鲁里
+     */
+    public static double getTodayCalorie() {
+        long todayMillis = TimeUtil.todayToMillis();
+        List<DailyCalorie> dailyCalories = LitePal
+                .where("date>=? and date<?",
+                        String.valueOf(todayMillis),
+                        String.valueOf(todayMillis + DateUtils.DAY_IN_MILLIS))
+                .find(DailyCalorie.class, true);
+
+        if (dailyCalories.size() > 0) {
+            return dailyCalories.get(0).getTotalIntake();
+        }
+
+        return 0;
+    }
+
+    /**
+     * 基于用户的信息，计算用户每日所需的卡路里。
+     */
+    public static double getKC() {
+        User user = LitePal.findFirst(User.class, true);
+        if (user != null) {
+            return HealthUtil.getKC(user.getHeight(), user.getWeight(), user.getAge(), user.getGender());
+        }
+        return 0;
+    }
+
+    /**
+     * 获取还需卡鲁里,如果不需获取,返回0
+     *
+     * @return
+     */
+    public static double getNeedCalorie() {
+        double finalNeedCalorie = getTodayCalorie() - getKC();
+        return finalNeedCalorie < 0 ? 0 : finalNeedCalorie;
+    }
+
 }
