@@ -154,7 +154,7 @@ public class CameraFragment extends Fragment {
         JSONObject result=new JSONObject();
         result.put("calorie", "200");
         result.put("has_calorie", 1);
-        result.put("name", "酸菜鱼");
+        result.put("name", "红烧肉");
         result.put("baike_info", baike);
 
         JSONArray result2=new JSONArray();
