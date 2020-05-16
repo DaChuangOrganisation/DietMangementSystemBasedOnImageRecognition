@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -298,11 +299,14 @@ public class DailyUtil {
         List<DailyCalorie> dailyCalories = DailyUtil.getToDayOfData(DailyCalorie.class, true);
         if (dailyCalories.size() > 0) {
             List<FoodItem> itemList = dailyCalories.get(0).getItemList();
-            return (int) itemList
-                    .stream()
-                    .mapToInt(foodItem -> foodType(TimeUtil.hourOfDay(foodItem.getDate())))
-                    .filter(a -> a > 0)
-                    .count();
+            HashSet<Integer> set = new HashSet<>();
+            itemList.forEach(foodItem -> {
+                int i = foodType(TimeUtil.hourOfDay(foodItem.getDate()));
+                if (i != 0) {
+                    set.add(i);
+                }
+            });
+            return set.size();
         }
         return 0;
     }
