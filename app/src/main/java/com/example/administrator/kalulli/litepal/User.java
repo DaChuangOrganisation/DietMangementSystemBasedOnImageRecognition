@@ -118,12 +118,32 @@ public class User extends LitePalSupport implements DataManipulation {
 
     @Override
     public boolean saveOrUpdateData() {
-        return   this.save();
+        return this.save();
     }
 
     @Override
     public int deleteData() {
-        return LitePal.delete(User.class,this.getId());
+        return LitePal.delete( User.class, this.getId() );
+    }
+
+    public int suggest_BMI() {
+        double BMI = 0;
+        double h = height/100;//单位换算为m
+        double w = weight;
+        BMI = w/Math.pow( h,2 );
+        if(BMI<18.5){
+            return 1;//偏瘦  对应推荐 菜肴_  谷薯芋、杂豆、主食_  蛋类、肉类及制品_
+        }
+        else if(BMI>=18.5&&BMI<=23.9){
+            return 2;//正常  对应推荐 谷薯芋、杂豆、主食_ 坚果、大豆及制品_   蔬果和菌藻_ 奶类及制品_
+        }
+        else if(BMI>=24&&BMI<=27.9){
+            return 3;//偏胖  对应推荐 谷薯芋、杂豆、主食_  蔬果和菌藻_
+        }
+        else{
+            return 4;//过胖  蔬果和菌藻_
+        }
+
     }
 
 }
