@@ -160,9 +160,12 @@ public class SuggestFragment extends Fragment
         User user = LitePal.findFirst(User.class);
         int BMILevel = user.suggest_BMI();
         double remainingCalorie = DailyUtil.getNeedCalorie();
-        if(remainingCalorie<0)
-            Toast.makeText(getContext(), "今日饮食已达标!", Toast.LENGTH_SHORT).show();
         int remainingMeal = user.getDishes();//api
+        if(remainingCalorie<0 || remainingMeal==0) {
+            Toast.makeText(getContext(), "今日饮食已达标!", Toast.LENGTH_SHORT).show();
+            rfabHelper.collapseContent();
+            return;
+        }
         SuggestAdapter adapter = null;
         List<Recommendation> finalRecommendations = null;
         String[] categories = null;
