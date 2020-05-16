@@ -134,7 +134,8 @@ public class Recommendation extends LitePalSupport implements DataManipulation {
             Recommendation r =  recommendations.get(0);
             nutrition.setCarbohydrate(r.getCarbohydrate());
             nutrition.setFat(r.getFat());
-            nutrition.setCellulose(r.cellulose);
+            nutrition.setCellulose(r.getCellulose());
+            nutrition.setProtein(r.getProtein());
         }
         return nutrition;
     }
