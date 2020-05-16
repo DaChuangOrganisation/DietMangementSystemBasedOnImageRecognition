@@ -213,7 +213,7 @@ public class DailyUtil {
      * @return
      */
     public static double getNeedCalorie() {
-        double finalNeedCalorie = getTodayCalorie() - getKC();
+        double finalNeedCalorie = getKC() - getTodayCalorie();
         return finalNeedCalorie < 0 ? 0 : finalNeedCalorie;
     }
 
