@@ -53,6 +53,7 @@ public class SuggestFragment extends Fragment
             "调味品","零食、点心、冷饮","其它","菜肴"};
 
     private static final String TAG = "SuggestFragment";
+    private static SuggestFragment reservedFragment = null;
     @BindView(R.id.suggest_recyclerView)
     RecyclerView suggestRecyclerView;
     Unbinder unbinder;
@@ -105,7 +106,10 @@ public class SuggestFragment extends Fragment
 
 
     public static SuggestFragment getInstance() {
-        return new SuggestFragment();
+        if(reservedFragment == null){
+            reservedFragment = new SuggestFragment();
+        }
+        return reservedFragment;
     }
 
     @Override

@@ -51,7 +51,7 @@ public class StartCameraFragment extends Fragment {
 
     @OnClick(R.id.camera)
     public void onViewClicked() {
-        ActivityUtils.replaceFragmentToActivity(getFragmentManager(), CameraFragment.getInstance(),R.id.content_main);
+        ActivityUtils.replaceFragmentToActivity(getFragmentManager(),R.id.content_main,5);
 
     }
 }
