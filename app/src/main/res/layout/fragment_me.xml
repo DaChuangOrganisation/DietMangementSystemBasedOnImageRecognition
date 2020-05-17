@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:background="#8ECCCCCC"
+        android:background="@color/colorPrimary"
         android:gravity="center">
 
 
