@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity {
 
         }
         if (mSavedInstanceState==null){
-            ActivityUtils.replaceFragmentToActivity(mFragmentManager, StartCameraFragment.getInstance(),R.id.content_main);
+            ActivityUtils.replaceFragmentToActivity(mFragmentManager,R.id.content_main,1);
         }
 //        if (mAVUserFinal == null){
 //            toast("请先登录",0);
@@ -69,23 +69,23 @@ public class MainActivity extends BaseActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.find_item:
-                        ActivityUtils.replaceFragmentToActivity(mFragmentManager,StartCameraFragment.getInstance(),R.id.content_main);
+                        ActivityUtils.replaceFragmentToActivity(mFragmentManager,R.id.content_main,1);
                         break;
                     case R.id.near_item:
-                        ActivityUtils.replaceFragmentToActivity(mFragmentManager, SuggestFragment.getInstance(),R.id.content_main);
+                        ActivityUtils.replaceFragmentToActivity(mFragmentManager, R.id.content_main,2);
                         break;
                     case R.id.daily_item:
-                        ActivityUtils.replaceFragmentToActivity(mFragmentManager, DailyFragment.getInstance(),R.id.content_main);
+                        ActivityUtils.replaceFragmentToActivity(mFragmentManager, R.id.content_main,3);
                         break;
                     case R.id.me_item:
-                        ActivityUtils.replaceFragmentToActivity(mFragmentManager, MeFragment.getInstance(),R.id.content_main);
+                        ActivityUtils.replaceFragmentToActivity(mFragmentManager,R.id.content_main,4);
                         break;
                 }
                 return true;
             }
         });
 //        TestUtil.test(this);//用于测试
-        TestUtil.test2(this);
+//        TestUtil.test2(this);
     }
 
     @Override
