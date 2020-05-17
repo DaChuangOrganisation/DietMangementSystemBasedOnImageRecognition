@@ -190,6 +190,7 @@ public class DailyFragment extends Fragment {
         }
         ArrayList<FoodItem> Breakfast=new ArrayList<FoodItem>();
         Breakfast.addAll(bf);
+        Log.i(TAG,"enter breakfast list num " + Breakfast.size());
         Intent intent=new Intent();
         intent.putParcelableArrayListExtra("com.example.administrator.kalulli.litepal.FoodItem",Breakfast);
         intent.putExtra("type",1);

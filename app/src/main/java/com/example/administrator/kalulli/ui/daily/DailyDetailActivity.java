@@ -50,6 +50,7 @@ public class DailyDetailActivity extends BaseActivity {
         //ArrayList<FoodItem> bk =new ArrayList<FoodItem>();
         //早餐列表
         list=intent.getParcelableArrayListExtra("com.example.administrator.kalulli.litepal.FoodItem");
+        Log.i(TAG,"DailyDetail get data moment list num" + list.size());
         type=intent.getExtras().getInt("type");
 
         initRecyclerView();
@@ -72,8 +73,9 @@ public class DailyDetailActivity extends BaseActivity {
                              @Override
                              public void onClick(DialogInterface dialogInterface, int i) {
                                  Toast.makeText(DailyDetailActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                                 long id=list.get(position).getId();
                                  dailyDetailAdapter.removeData(position);
-                                 deleteData(position);
+                                 deleteData(id);
                              }
                          })
                          .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消
@@ -97,10 +99,11 @@ public class DailyDetailActivity extends BaseActivity {
     /*
     * 删除
     * */
-    public void deleteData(int pos) {
-        long id;
-        id=list.get(pos).getId();
-        FoodItem item= LitePal.find(FoodItem.class,id,true);
+    public void deleteData(long id) {
+        //long id;
+        Log.i(TAG,"DailyDetail click delete moment list num" + list.size());
+        //id=list.get(pos).getId();       //获取选中fooditem id
+        FoodItem item= LitePal.find(FoodItem.class,id,true); //根据id锁定Fooditem
         double deleteCalorie=item.getCalorie();
         Log.i(TAG,"item calorie"+deleteCalorie);
         try{
