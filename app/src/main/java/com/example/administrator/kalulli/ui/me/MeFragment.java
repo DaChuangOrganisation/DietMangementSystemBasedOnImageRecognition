@@ -88,8 +88,13 @@ public class MeFragment extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), UpdateInfo.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getContext(), UpdateInfo.class);
+//                startActivity(intent);
+                Intent i=new Intent();
+                i.setClass(getContext(), UpdateInfo.class);
+                //一定要指定是第几个pager，因为要跳到ThreeFragment，这里填写2
+                i.putExtra("id",2);
+                startActivity(i);
             }
         });
         User user= LitePal.findFirst(User.class);

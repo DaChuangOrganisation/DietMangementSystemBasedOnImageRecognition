@@ -1,12 +1,14 @@
 package com.example.administrator.kalulli;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -93,4 +95,19 @@ public class MainActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent( intent );
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int id = getIntent().getIntExtra("id", 0);
+        if(id==1){
+            ActivityUtils.replaceFragmentToActivity(mFragmentManager, MeFragment.getInstance(),R.id.content_main);
+
+        }
+    }
 }
