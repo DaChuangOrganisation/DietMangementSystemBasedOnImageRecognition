@@ -188,15 +188,20 @@ public class SuggestFragment extends Fragment
                 }
                 finalRecommendations = recommendationAlgorithm(categories,remainingCalorie,remainingMeal);
                 List<Recommendation> cuttedRecommendations = new ArrayList<>();
+                int[] randomNumbers = new int[remainingMeal];
+                for(int i=0;i<randomNumbers.length;i++)
+                    randomNumbers[i]=-1;
                 for(int i=0;i<remainingMeal;){
                     int randomNumber = user.getRandom(0,finalRecommendations.size()-1);//api
                     Recommendation pickoutOne = finalRecommendations.get(randomNumber);
-                    if(!cuttedRecommendations.contains(pickoutOne)){//非重复推荐
+                    if(!containsNumber(randomNumbers,randomNumber)){//非重复推荐
+                        Log.d(TAG,"randomNumber:"+String.valueOf(randomNumber));
                         cuttedRecommendations.add(pickoutOne);
+                        randomNumbers[i]=randomNumber;
                         i++;
                     }
                 }
-                adapter = new SuggestAdapter(finalRecommendations,getContext());
+                adapter = new SuggestAdapter(cuttedRecommendations,getContext());
                 break;
         }
         suggestRecyclerView.setAdapter(adapter);
@@ -214,6 +219,7 @@ public class SuggestFragment extends Fragment
                     .find(Recommendation.class);
             unionList(recommendations,metRecommendations);
         }
+        Log.d(TAG,"推荐总数:"+String.valueOf(recommendations.size()));
         return recommendations;
     }
 
@@ -224,5 +230,13 @@ public class SuggestFragment extends Fragment
             }
         }
         return beJoined;
+    }
+
+    private boolean containsNumber(int[] numbers,int number){
+        for(int i=0;i<numbers.length;i++){
+            if(numbers[i]==number)
+                return true;
+        }
+        return false;
     }
 }
