@@ -23,6 +23,7 @@ public class TestUtil {
         Log.e(TAG,String.format("加载数据运行时间:%f s",(endTime-startTime)/1000.0));
     }
     public static void test2(Activity context){
-        Log.d(TAG, Recommendation.getFoodNutrition("红烧肉").toString());
+        String info = NutritionUtil.getFoodNutritionOnline("口水鸡").toString();
+        Log.d(TAG,info);
     }
 }

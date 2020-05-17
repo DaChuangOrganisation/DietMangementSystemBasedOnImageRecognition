@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 //        TestUtil.test(this);//用于测试
-//        TestUtil.test2(this);
+        TestUtil.test2(this);
     }
 
     @Override
