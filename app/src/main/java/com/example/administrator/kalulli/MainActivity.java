@@ -52,8 +52,10 @@ public class MainActivity extends BaseActivity {
             Log.e("MainActivity","Dishes: "+user1.getDishes());
 
         }
-        if (mSavedInstanceState==null){
+        if (mSavedInstanceState==null){{
+
             ActivityUtils.replaceFragmentToActivity(mFragmentManager,R.id.content_main,1);
+        }
         }
 //        if (mAVUserFinal == null){
 //            toast("请先登录",0);
@@ -106,7 +108,7 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         int id = getIntent().getIntExtra("id", 0);
         if(id==1){
-            ActivityUtils.replaceFragmentToActivity(mFragmentManager, MeFragment.getInstance(),R.id.content_main);
+            ActivityUtils.replaceFragmentToActivity(mFragmentManager,R.id.content_main,4);
 
         }
     }
