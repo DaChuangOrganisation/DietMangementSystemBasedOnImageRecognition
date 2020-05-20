@@ -1,6 +1,7 @@
 package com.example.administrator.kalulli.ui.me;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -78,6 +79,28 @@ public class MeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG,"Resume");
+        User user= LitePal.findFirst(User.class);
+        usernameStr = user.getName();
+        if(usernameStr!=null&&!usernameStr.equals( "" ))
+            username.setText( usernameStr );
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG,"onStart");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG,"onAttach");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -88,8 +111,13 @@ public class MeFragment extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), UpdateInfo.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getContext(), UpdateInfo.class);
+//                startActivity(intent);
+                Intent i=new Intent();
+                i.setClass(getContext(), UpdateInfo.class);
+                //一定要指定是第几个pager，因为要跳到ThreeFragment，这里填写2
+                i.putExtra("id",2);
+                startActivity(i);
             }
         });
         User user= LitePal.findFirst(User.class);

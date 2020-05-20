@@ -37,8 +37,8 @@ public class ActivityUtils {
         Fragment fragment = null;
         switch (index){
             case 1:
-                if(startCameraFragment==null){
-                    startCameraFragment = StartCameraFragment.getInstance();
+                if(startCameraFragment==null) {
+                    startCameraFragment = new StartCameraFragment();
                     mFragmentTransaction.add(frameId,startCameraFragment);
                 }
                 fragment = startCameraFragment;
@@ -72,7 +72,6 @@ public class ActivityUtils {
                 fragment = cameraFragment;
                 break;
         }
-
         mFragmentTransaction.show(fragment);
         mFragmentTransaction.commit();
     }
@@ -86,6 +85,7 @@ public class ActivityUtils {
             ft.hide(dailyFragment);
         if (startCameraFragment != null)
             ft.hide(startCameraFragment);
-
+        if (cameraFragment != null)
+            ft.hide(cameraFragment);
     }
 }

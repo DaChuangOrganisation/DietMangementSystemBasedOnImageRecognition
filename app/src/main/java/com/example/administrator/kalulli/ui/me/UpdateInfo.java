@@ -1,5 +1,6 @@
 package com.example.administrator.kalulli.ui.me;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -15,9 +16,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.example.administrator.kalulli.BasicInfoInput;
+import com.example.administrator.kalulli.MainActivity;
 import com.example.administrator.kalulli.R;
 import com.example.administrator.kalulli.base.BaseActivity;
 import com.example.administrator.kalulli.litepal.User;
+import com.example.administrator.kalulli.utils.ActivityUtils;
 import com.example.administrator.kalulli.utils.TableUtil;
 
 import org.litepal.LitePal;
@@ -26,6 +29,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static org.litepal.LitePalApplication.getContext;
 
 public class UpdateInfo extends BaseActivity {
     @BindView( R.id.xiugaibtn )
@@ -142,8 +147,20 @@ public class UpdateInfo extends BaseActivity {
                 userinfo.setWeight( weightInt );
                 userinfo.setGender( sex );
                 userinfo.saveOrUpdateData();
-                Toast.makeText( this,"基本信息修改成功",Toast.LENGTH_SHORT );
-                finish();
+                // 由于 activity不能直接跳转到 fragment，需要先去跳转到 MainActivity 中，
+                // 根据在 MainActivity 中显示的方法去显示需要的fragment即可
+//                Intent intent=new Intent(UpdateInfo.this, MainActivity.class);
+//                intent.putExtra("id",1);    // 1表示个人中心
+//                startActivity(intent);
+
+                toast( "修改成功",0 );
+                onBackRegisterImageClicked();
+//                Toast.makeText( this,"基本信息修改成功",Toast.LENGTH_SHORT );
+//                new Handler().postDelayed( new Runnable() {
+//                    @Override
+//                    public void run() {
+//                    }
+//                }, 200);
             }
         }
         else{

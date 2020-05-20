@@ -10,6 +10,7 @@
     <style name="AppTheme.Splash">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@drawable/splash</item>
+
     </style>
 
 
