@@ -1,6 +1,7 @@
 package com.example.administrator.kalulli.ui.me;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -75,6 +76,28 @@ public class MeFragment extends Fragment {
     };
     public static MeFragment getInstance() {
         return new MeFragment();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG,"Resume");
+        User user= LitePal.findFirst(User.class);
+        usernameStr = user.getName();
+        if(usernameStr!=null&&!usernameStr.equals( "" ))
+            username.setText( usernameStr );
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG,"onStart");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG,"onAttach");
     }
 
     @Override

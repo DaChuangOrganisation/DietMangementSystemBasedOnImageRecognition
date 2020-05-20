@@ -149,11 +149,12 @@ public class UpdateInfo extends BaseActivity {
                 userinfo.saveOrUpdateData();
                 // 由于 activity不能直接跳转到 fragment，需要先去跳转到 MainActivity 中，
                 // 根据在 MainActivity 中显示的方法去显示需要的fragment即可
-                Intent intent=new Intent(UpdateInfo.this, MainActivity.class);
-                intent.putExtra("id",1);    // 1表示个人中心
-                startActivity(intent);
+//                Intent intent=new Intent(UpdateInfo.this, MainActivity.class);
+//                intent.putExtra("id",1);    // 1表示个人中心
+//                startActivity(intent);
 
                 toast( "修改成功",0 );
+                onBackRegisterImageClicked();
 //                Toast.makeText( this,"基本信息修改成功",Toast.LENGTH_SHORT );
 //                new Handler().postDelayed( new Runnable() {
 //                    @Override
